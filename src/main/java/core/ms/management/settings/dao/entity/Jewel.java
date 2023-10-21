@@ -11,17 +11,22 @@ public class Jewel {
     @Column(name = "jewel_id")
     private long id;
 
-    @OneToOne(targetEntity = Karat.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Karat.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "karat_id")
     private Karat karat;
 
-    @OneToOne(targetEntity = Material.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Material.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "material_id")
     private Material material;
 
-    @OneToOne(targetEntity = Classification.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "classification_id")
+    @ManyToOne(targetEntity = Classification.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cla_id")
     private Classification classification;
+
+    @ManyToOne(targetEntity = JewelCategory.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "jewel_category_id")
+    private JewelCategory jewelCategory;
+
 
     public long getId() {
         return id;
@@ -53,5 +58,13 @@ public class Jewel {
 
     public void setClassification(Classification classification) {
         this.classification = classification;
+    }
+
+    public JewelCategory getJewelCategory() {
+        return jewelCategory;
+    }
+
+    public void setJewelCategory(JewelCategory jewelCategory) {
+        this.jewelCategory = jewelCategory;
     }
 }

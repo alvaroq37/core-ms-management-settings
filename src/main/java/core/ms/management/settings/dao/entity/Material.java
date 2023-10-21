@@ -2,6 +2,8 @@ package core.ms.management.settings.dao.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "t_material")
 public class Material {
@@ -10,10 +12,13 @@ public class Material {
     @Column(name = "material_id")
     private long id;
 
-    @OneToOne(mappedBy = "material")
-    private Jewel jewel;
+    @Column(name = "description")
+    private String description;
 
-    @OneToOne(targetEntity = MaterialPrice.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Jewel.class, fetch = FetchType.EAGER, mappedBy = "material", cascade = CascadeType.ALL)
+    private List<Jewel> jewels;
+
+    @ManyToOne(targetEntity = MaterialPrice.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "material_price_id")
     private MaterialPrice materialPrice;
 
@@ -21,16 +26,24 @@ public class Material {
         return id;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
 
-    public Jewel getJewel() {
-        return jewel;
+    public List<Jewel> getJewels() {
+        return jewels;
     }
 
-    public void setJewel(Jewel jewel) {
-        this.jewel = jewel;
+    public void setJewels(List<Jewel> jewels) {
+        this.jewels = jewels;
     }
 
     public MaterialPrice getMaterialPrice() {

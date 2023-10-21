@@ -14,7 +14,8 @@ public class SubClassification {
     @Column(name = "description")
     private String description;
 
-    @OneToOne(mappedBy = "subClassification")
+    @ManyToOne(targetEntity = Classification.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cla_id")
     private Classification classification;
 
     public long getId() {
@@ -33,10 +34,10 @@ public class SubClassification {
         this.description = description;
     }
 
-    public Classification getClassification() {
-        return classification;
-    }
-
+//    public Classification getClassification() {
+//        return classification;
+//    }
+//
     public void setClassification(Classification classification) {
         this.classification = classification;
     }
