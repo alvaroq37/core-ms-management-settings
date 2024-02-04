@@ -34,7 +34,7 @@ public class CityRest {
         return cityImpl.cityFindById(jsonCity);
     }
 
-    @GET
+    @POST
     @Path("/find/by/name")
     public Response cityFindByName(JsonObject jsonCity) throws JsonProcessingException {
 

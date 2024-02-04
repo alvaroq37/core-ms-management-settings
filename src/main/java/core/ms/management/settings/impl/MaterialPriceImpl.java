@@ -39,8 +39,8 @@ public class MaterialPriceImpl {
     public Response materialPriceSave(JsonObject jsonDataMaterialPrice){
         try {
             MaterialPrice materialPrice = new MaterialPrice();
-            materialPrice.setPrice(Float.parseFloat(jsonDataMaterialPrice.getString("price")));
-            materialPrice.setDescription(jsonDataMaterialPrice.getString("description"));
+            materialPrice.price = Float.parseFloat(jsonDataMaterialPrice.getString("price"));
+            materialPrice.description = jsonDataMaterialPrice.getString("description");
 
             materialPriceRepository.materialPriceSave(materialPrice);
 

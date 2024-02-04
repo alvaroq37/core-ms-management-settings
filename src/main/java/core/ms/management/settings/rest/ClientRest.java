@@ -32,7 +32,7 @@ public class ClientRest {
         return clientImpl.clientFindById(jsonClient);
     }
 
-    @GET
+    @POST
     @Path("/find/by/ci")
     public Response clientFindByCi(JsonObject jsonClient) {
         return clientImpl.clientFindByCi(jsonClient);

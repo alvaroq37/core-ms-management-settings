@@ -2,8 +2,10 @@ package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.City;
 import core.ms.management.settings.dao.entity.Country;
+import core.ms.management.settings.dao.entity.Department;
 import core.ms.management.settings.dao.repository.CityRepository;
 import core.ms.management.settings.dao.repository.CountryRepository;
+import core.ms.management.settings.dao.repository.DepartmentRepository;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -20,7 +22,7 @@ public class CityImpl {
     CityRepository cityRepository;
 
     @Inject
-    CountryRepository countryRepository;
+    DepartmentRepository departmentRepository;
 
     public Response cityListAll() {
         try {
@@ -91,11 +93,11 @@ public class CityImpl {
 
     public Response citySave(JsonObject jsonDataCity) {
         try {
-            long id = Long.parseLong(jsonDataCity.getString("id"));
-            Country country = countryRepository.countryFindById(id);
+            long id = Long.parseLong(jsonDataCity.getString("country_id"));
+            Department department = departmentRepository.findDepartmentById(id);
             City city = new City();
-            city.setName(jsonDataCity.getString("name").toUpperCase());
-            city.setCountry(country);
+            city.name = jsonDataCity.getString("name").toUpperCase();
+            city.departament = department;
             cityRepository.citySave(city);
             JsonObject jsonResponseCreateCity = new JsonObject();
             jsonResponseCreateCity.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " CREATED");
@@ -126,15 +128,15 @@ public class CityImpl {
         try {
             JsonObject jsonResponseCityUpdate = new JsonObject();
             long id = Long.parseLong(jsonDataCity.getString("id"));
-            long idCountry = Long.parseLong(jsonDataCity.getString("idCountry"));
+            long idDepartment = Long.parseLong(jsonDataCity.getString("idDepartment"));
             City city = cityRepository.cityFindById(id);
-            Country country = countryRepository.countryFindById(idCountry);
-            if (city == null || country == null) {
+            Department department = departmentRepository.findDepartmentById(idDepartment);
+            if (city == null || department == null) {
                 jsonResponseCityUpdate.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " NOT EXISTS");
                 return Response.ok(jsonResponseCityUpdate).build();
             }
-            city.setName(jsonDataCity.getString("name").toUpperCase());
-            city.setCountry(country);
+            city.name = jsonDataCity.getString("name").toUpperCase();
+            city.departament = department;
             cityRepository.cityUpdate(city);
             jsonResponseCityUpdate.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " HAS UPDATE");
             Response response = Response.ok(jsonResponseCityUpdate).build();

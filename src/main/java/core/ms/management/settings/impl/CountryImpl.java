@@ -91,7 +91,7 @@ public class CountryImpl {
     public Response countrySave(JsonObject jsonDataCountry) {
         try {
             Country country = new Country();
-            country.setName(jsonDataCountry.getString("name").toUpperCase());
+            country.name = (jsonDataCountry.getString("name").toUpperCase());
             countryRepository.countrySave(country);
             JsonObject jsonResponseCountrySave = new JsonObject();
             jsonResponseCountrySave.put("message", "COUNTRY " + jsonDataCountry.getString("name").toUpperCase() + " CREATED");
@@ -128,7 +128,7 @@ public class CountryImpl {
                 return Response.ok(jsonResponseFail).build();
             }
             Country country = countryRepository.countryFindById(id);
-            country.setName(name.toUpperCase());
+            country.name = jsonDataCountry.getString("name").toUpperCase();
             countryRepository.countryUpdate(country);
             jsonResponseCountryUpdate.put("message", "COUNTRY " + name.toUpperCase() + " HAS UPDATE");
             Response response = Response.ok(jsonResponseCountryUpdate).build();

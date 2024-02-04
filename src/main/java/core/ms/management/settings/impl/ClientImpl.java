@@ -124,19 +124,19 @@ public class ClientImpl {
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
 
             Client client = new Client();
-            client.setCi(jsonDataClient.getString("ci"));
-            client.setNames(jsonDataClient.getString("names").toUpperCase());
-            client.setAddress(jsonDataClient.getString("address").toUpperCase());
-            client.setEmail(jsonDataClient.getString("email"));
-            client.setCellPhone(Integer.parseInt(jsonDataClient.getString("number_cell_phone")));
+            client.ci = jsonDataClient.getString("ci");
+            client.names = jsonDataClient.getString("names").toUpperCase();
+            client.address = jsonDataClient.getString("address").toUpperCase();
+            client.email = jsonDataClient.getString("email");
+            client.cellPhone = Integer.parseInt(jsonDataClient.getString("number_cell_phone"));
             //TODO: Generar la lógica para parsear la fecha que llega en string
-            client.setDateBirth(new Date());
-            client.setLastNamesMaternal(jsonDataClient.getString("names_maternal").toUpperCase());
-            client.setLastNamesPaternal(jsonDataClient.getString("names_paternal").toUpperCase());
-            client.setPhone(Integer.parseInt(jsonDataClient.getString("number_phone")));
-            client.setCity(city);
-            client.setSexuality(sex);
-            client.setOccupation(occupation);
+            client.dateBirth = new Date();
+            client.lastNamesMaternal = jsonDataClient.getString("names_maternal").toUpperCase();
+            client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
+            client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
+            client.city = city;
+            client.sex = sex;
+            client.occupation = occupation;
 
             clientRepository.clientSave(client);
             JsonObject jsonResponseClientSave = new JsonObject();
@@ -182,19 +182,19 @@ public class ClientImpl {
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
 
             Client client = clientRepository.clientFindById(Long.parseLong(jsonDataClient.getString("id")));
-            client.setCi(jsonDataClient.getString("ci"));
-            client.setNames(jsonDataClient.getString("names").toUpperCase());
-            client.setAddress(jsonDataClient.getString("address").toUpperCase());
-            client.setEmail(jsonDataClient.getString("email"));
-            client.setCellPhone(Integer.parseInt(jsonDataClient.getString("number_cell_phone")));
+            client.ci = jsonDataClient.getString("ci");
+            client.names = jsonDataClient.getString("names").toUpperCase();
+            client.address = jsonDataClient.getString("address").toUpperCase();
+            client.email = jsonDataClient.getString("email");
+            client.cellPhone = Integer.parseInt(jsonDataClient.getString("number_cell_phone"));
             //TODO: Generar la lógica para parsear la fecha que llega en string
-            client.setDateBirth(new Date());
-            client.setLastNamesMaternal(jsonDataClient.getString("names_maternal").toUpperCase());
-            client.setLastNamesPaternal(jsonDataClient.getString("names_paternal").toUpperCase());
-            client.setPhone(Integer.parseInt(jsonDataClient.getString("number_phone")));
-            client.setCity(city);
-            client.setSexuality(sex);
-            client.setOccupation(occupation);
+            client.dateBirth = new Date();
+            client.lastNamesMaternal = jsonDataClient.getString("names_maternal").toUpperCase();
+            client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
+            client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
+            client.city = city;
+            client.sex = sex;
+            client.occupation = occupation;
 
             clientRepository.clientUpdate(client);
             jsonResponseClientUpdate.put("message", "CLIENT " + name.toUpperCase() + " HAS UPDATE");

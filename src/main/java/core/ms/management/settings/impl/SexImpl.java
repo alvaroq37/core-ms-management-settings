@@ -89,7 +89,7 @@ public class SexImpl {
     public Response citySave(JsonObject jsonDataSex) {
         try {
             Sex sex = new Sex();
-            sex.setDescription(jsonDataSex.getString("description").toUpperCase());
+            sex.description = jsonDataSex.getString("description").toUpperCase();
             sexRepository.sexSave(sex);
             JsonObject jsonResponseCreateSex = new JsonObject();
             jsonResponseCreateSex.put("message", "SEX " + jsonDataSex.getString("description").toUpperCase() + " CREATED");
@@ -126,7 +126,7 @@ public class SexImpl {
                 return Response.ok(jsonResponseFail).build();
             }
             Sex sex = sexRepository.sexFindById(id);
-            sex.setDescription(description.toUpperCase());
+            sex.description = description.toUpperCase();
             sexRepository.sexUpdate(sex);
             jsonResponseSexUpdate.put("message", "SEX " + description.toUpperCase() + " HAS UPDATE");
             Response response = Response.ok(jsonResponseSexUpdate).build();

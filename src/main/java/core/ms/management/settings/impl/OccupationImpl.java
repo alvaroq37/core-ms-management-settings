@@ -86,7 +86,7 @@ public class OccupationImpl {
     public Response occupationSave(JsonObject jsonDataCountry) {
         try {
             Occupation occupation = new Occupation();
-            occupation.setDescription(jsonDataCountry.getString("description"));
+            occupation.description = jsonDataCountry.getString("description");
             occupationRepository.occupationSave(occupation);
             JsonObject jsonResponseOccupationSave = new JsonObject();
             jsonResponseOccupationSave.put("message", "OCCUPATION " + jsonDataCountry.getString("description").toUpperCase() + " CREATED");
@@ -123,7 +123,7 @@ public class OccupationImpl {
                 return Response.ok(jsonResponseFail).build();
             }
             Occupation occupation = occupationRepository.occupationFindById(id);
-            occupation.setDescription(description);
+            occupation.description = description;
             jsonResponseOccupationUpdate.put("message", "OCCUPATION " + description.toUpperCase() + " HAS UPDATE");
             Response response = Response.ok(jsonResponseOccupationUpdate).build();
             return Response.ok(response.getEntity()).build();

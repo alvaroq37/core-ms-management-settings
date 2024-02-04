@@ -1,15 +1,19 @@
 package core.ms.management.settings.dao.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "t_sexs")
-public class Sex {
+@Table(name ="t_business_discounts")
+public class BusinessDiscounts {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public long id;
-    @Column(name = "description")
+    public Long id;
+
+    @Column(name = "desription")
     public String description;
+
+    @Column(name = "value")
+    public float value;
 }

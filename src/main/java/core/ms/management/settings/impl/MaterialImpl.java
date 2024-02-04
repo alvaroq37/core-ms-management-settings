@@ -47,8 +47,8 @@ public class MaterialImpl {
             MaterialPrice materialPrice = materialPriceRepository.findById(idMaterialPrice);
 
             Material material = new Material();
-            material.setDescription(jsonDataMaterial.getString("description"));
-            material.setMaterialPrice(materialPrice);
+            material.description = jsonDataMaterial.getString("description");
+            material.materialPrice = materialPrice;
 
             materialRepository.materialSave(material);
 
