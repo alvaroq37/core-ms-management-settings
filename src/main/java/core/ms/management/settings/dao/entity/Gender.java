@@ -3,11 +3,10 @@ package core.ms.management.settings.dao.entity;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "t_occupations")
-public class Occupation {
+@Table(name = "t_gender")
+public class Gender {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

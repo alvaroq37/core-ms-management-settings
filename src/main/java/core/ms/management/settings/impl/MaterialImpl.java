@@ -1,8 +1,6 @@
 package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.Material;
-import core.ms.management.settings.dao.entity.MaterialPrice;
-import core.ms.management.settings.dao.repository.MaterialPriceRepository;
 import core.ms.management.settings.dao.repository.MaterialRepository;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -17,9 +15,6 @@ public class MaterialImpl {
 
     @Inject
     MaterialRepository materialRepository;
-
-    @Inject
-    MaterialPriceRepository materialPriceRepository;
 
     JsonObject jsonResponseFail = new JsonObject();
     public Response materialListAll(){
@@ -43,12 +38,11 @@ public class MaterialImpl {
 
     public Response materialSave(JsonObject jsonDataMaterial){
         try {
-            long idMaterialPrice = Long.parseLong(jsonDataMaterial.getString("id_material_price"));
-            MaterialPrice materialPrice = materialPriceRepository.findById(idMaterialPrice);
 
             Material material = new Material();
             material.description = jsonDataMaterial.getString("description");
-            material.materialPrice = materialPrice;
+            material.karat = jsonDataMaterial.getInteger("karat");
+            material.status = jsonDataMaterial.getBoolean("status");
 
             materialRepository.materialSave(material);
 

@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -93,14 +94,17 @@ public class CityImpl {
 
     public Response citySave(JsonObject jsonDataCity) {
         try {
-            long id = Long.parseLong(jsonDataCity.getString("country_id"));
-            Department department = departmentRepository.findDepartmentById(id);
+            JsonObject jsonDepartment;
+            jsonDepartment = jsonDataCity.getJsonObject("department");
+            long department_id = Long.parseLong(jsonDepartment.getString("id"));
+            Department department = departmentRepository.findDepartmentById(department_id);
             City city = new City();
             city.name = jsonDataCity.getString("name").toUpperCase();
+            city.dateCreate = new Date();
             city.departament = department;
             cityRepository.citySave(city);
             JsonObject jsonResponseCreateCity = new JsonObject();
-            jsonResponseCreateCity.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " CREATED");
+            jsonResponseCreateCity.put("message", "CITY " + jsonDataCity.getString("name") + " CREATED");
             return Response.ok(jsonResponseCreateCity).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();

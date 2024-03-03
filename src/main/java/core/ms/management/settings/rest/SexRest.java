@@ -20,7 +20,7 @@ public class SexRest {
     SexImpl sexImpl;
 
     @GET
-    @Path("/list/all")
+    @Path("/find/all")
     public Response sexListAll() {
         return sexImpl.SexListAll();
     }

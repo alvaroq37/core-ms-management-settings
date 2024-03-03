@@ -2,6 +2,8 @@ package core.ms.management.settings.dao.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name ="t_business_discounts")
 public class BusinessDiscounts {
@@ -16,4 +18,19 @@ public class BusinessDiscounts {
 
     @Column(name = "value")
     public float value;
+
+    @Column(name = "status")
+    public boolean status;
+
+    @Column(name = "date_create")
+    public Date dateCreate;
+
+    @Column(name = "date_update")
+    public Date dateUpdate;
+
+    @Column(name = "user_create")
+    public int user_create;
+
+    @Column(name = "user_update")
+    public int userUpdate;
 }

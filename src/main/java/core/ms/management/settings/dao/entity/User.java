@@ -1,14 +1,15 @@
 package core.ms.management.settings.dao.entity;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
-@Table(name = "t_clients")
-public class Client {
+@Table(name="t_user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name="id")
     public long id;
     @Column(name = "ci")
     public String ci;
@@ -41,19 +42,13 @@ public class Client {
     @Column(name = "user_update")
     public int userUpdate;
 
-    @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "city_id")
-    public City city;
-
-    @ManyToOne(targetEntity = Gender.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "gender_id")
-    public Gender gender;
-
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "occ_id")
     public Occupation occupation;
-
-    @ManyToOne(targetEntity = ClientCategory.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cc_id")
-    public ClientCategory clientCategory;
+    @ManyToOne(targetEntity = Gender.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "gender_id")
+    public Gender gender;
+    @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_id")
+    public City city;
 }

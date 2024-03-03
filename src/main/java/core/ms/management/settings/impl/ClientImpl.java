@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import core.ms.management.settings.dao.entity.City;
 import core.ms.management.settings.dao.entity.Client;
 import core.ms.management.settings.dao.entity.Occupation;
-import core.ms.management.settings.dao.entity.Sex;
+import core.ms.management.settings.dao.entity.Gender;
 import core.ms.management.settings.dao.repository.CityRepository;
 import core.ms.management.settings.dao.repository.ClientRepository;
 import core.ms.management.settings.dao.repository.OccupationRepository;
 import core.ms.management.settings.dao.repository.SexRepository;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -17,7 +16,6 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @ApplicationScoped
 public class ClientImpl {
@@ -120,7 +118,7 @@ public class ClientImpl {
             long idOccupation = Long.parseLong(jsonDataClient.getString("idOccupation"));
 
             City city = cityRepository.cityFindById(idCity);
-            Sex sex = sexRepository.sexFindById(idSex);
+            Gender gender = sexRepository.sexFindById(idSex);
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
 
             Client client = new Client();
@@ -135,12 +133,12 @@ public class ClientImpl {
             client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
             client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
             client.city = city;
-            client.sex = sex;
+            client.gender = gender;
             client.occupation = occupation;
 
             clientRepository.clientSave(client);
             JsonObject jsonResponseClientSave = new JsonObject();
-            jsonResponseClientSave.put("message", "CLIENT " + jsonDataClient.getString("name").toUpperCase() + " CREATED");
+            jsonResponseClientSave.put("message", "CLIENT " + jsonDataClient.getString("name") + " CREATED");
             return Response.ok(jsonResponseClientSave).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();
@@ -178,7 +176,7 @@ public class ClientImpl {
             long idOccupation = Long.parseLong(jsonDataClient.getString("idOccupation"));
 
             City city = cityRepository.cityFindById(idCity);
-            Sex sex = sexRepository.sexFindById(idSex);
+            Gender gender = sexRepository.sexFindById(idSex);
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
 
             Client client = clientRepository.clientFindById(Long.parseLong(jsonDataClient.getString("id")));
@@ -193,7 +191,7 @@ public class ClientImpl {
             client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
             client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
             client.city = city;
-            client.sex = sex;
+            client.gender = gender;
             client.occupation = occupation;
 
             clientRepository.clientUpdate(client);

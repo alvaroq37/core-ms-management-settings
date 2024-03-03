@@ -20,7 +20,7 @@ public class OccupationRest {
     OccupationImpl occupationImpl;
 
     @GET
-    @Path("/list/all")
+    @Path("/find/all")
     public Response occupationListAll() {
         return occupationImpl.occupationListAll();
     }

@@ -2,6 +2,7 @@ package core.ms.management.settings.dao.entity;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,14 +12,20 @@ public class Material {
     @Id
     @Column(name = "id")
     public long id;
-
     @Column(name = "description")
     public String description;
-
-    @OneToMany(targetEntity = Jewel.class, fetch = FetchType.EAGER, mappedBy = "material", cascade = CascadeType.ALL)
-    public List<Jewel> jewels;
-
-    @ManyToOne(targetEntity = MaterialPrice.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "material_price_id")
-    public MaterialPrice materialPrice;
+    @Column(name = "price")
+    public float price;
+    @Column(name = "karat")
+    public int karat;
+    @Column(name = "status")
+    public boolean status;
+    @Column(name = "date_create")
+    public Date dateCreate;
+    @Column(name = "date_update")
+    public Date dateUpdate;
+    @Column(name = "user_create")
+    public int user_create;
+    @Column(name = "user_update")
+    public int userUpdate;
 }

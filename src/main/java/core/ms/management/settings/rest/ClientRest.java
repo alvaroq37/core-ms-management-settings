@@ -21,7 +21,7 @@ public class ClientRest {
     ClientImpl clientImpl;
 
     @GET
-    @Path("/list/all")
+    @Path("/find/all")
     public Response clientListAll() {
         return clientImpl.clientListAll();
     }

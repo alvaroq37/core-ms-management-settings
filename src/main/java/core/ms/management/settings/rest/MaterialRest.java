@@ -26,7 +26,7 @@ public class MaterialRest {
     }
 
     @GET
-    @Path("/list/all")
+    @Path("/find/all")
     public Response materialListAll() {
         return materialImpl.materialListAll();
     }

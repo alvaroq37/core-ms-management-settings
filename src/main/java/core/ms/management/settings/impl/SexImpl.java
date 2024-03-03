@@ -1,9 +1,8 @@
 package core.ms.management.settings.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.ms.management.settings.dao.entity.Sex;
+import core.ms.management.settings.dao.entity.Gender;
 import core.ms.management.settings.dao.repository.SexRepository;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,12 +22,12 @@ public class SexImpl {
 
     public Response SexListAll() {
         try {
-            List<Sex> SexListAll = sexRepository.sexListAll();
-            JsonArray jsonArrayListAll = new JsonArray(SexListAll);
+            List<Gender> genderListAll = sexRepository.sexListAll();
+            JsonArray jsonArrayListAll = new JsonArray(genderListAll);
             Response response = Response.ok(jsonArrayListAll).build();
 
             if (response.getStatus() == 200) {
-                if (SexListAll.isEmpty()) {
+                if (genderListAll.isEmpty()) {
                     jsonResponseFail.put("message", "LIST SEX IS EMPTY");
                     return Response.ok(jsonResponseFail).build();
                 }
@@ -43,12 +42,12 @@ public class SexImpl {
     public Response SexFindById(JsonObject jsonDataSex) {
         try {
             long id = Long.parseLong(jsonDataSex.getString("id"));
-            Sex sex = sexRepository.sexFindById(id);
-            if(sex == null){
+            Gender gender = sexRepository.sexFindById(id);
+            if(gender == null){
                 jsonResponseFail.put("message", "SEX  BY ID: " + id + " NOT EXISTS");
                 return Response.ok(jsonResponseFail).build();
             }
-            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(sex));
+            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(gender));
             Response response = Response.ok(jsonArraySex).build();
             if (response.getStatus() == 200) {
                 if (jsonArraySex.isEmpty()) {
@@ -66,12 +65,12 @@ public class SexImpl {
     public Response SexFindByDescription(JsonObject jsonDataSex) {
         try {
             String description = jsonDataSex.getString("description");
-            Sex sex = sexRepository.sexFindByDescription(description);
-            if(sex == null){
+            Gender gender = sexRepository.sexFindByDescription(description);
+            if(gender == null){
                 jsonResponseFail.put("message", "SEX  BY NAME: " + description.toUpperCase() + " NOT EXISTS");
                 return Response.ok(jsonResponseFail).build();
             }
-            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(sex));
+            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(gender));
             Response response = Response.ok(jsonArraySex).build();
             if (response.getStatus() == 200) {
                 if (jsonArraySex.isEmpty()) {
@@ -88,9 +87,9 @@ public class SexImpl {
 
     public Response citySave(JsonObject jsonDataSex) {
         try {
-            Sex sex = new Sex();
-            sex.description = jsonDataSex.getString("description").toUpperCase();
-            sexRepository.sexSave(sex);
+            Gender gender = new Gender();
+            gender.description = jsonDataSex.getString("description").toUpperCase();
+            sexRepository.sexSave(gender);
             JsonObject jsonResponseCreateSex = new JsonObject();
             jsonResponseCreateSex.put("message", "SEX " + jsonDataSex.getString("description").toUpperCase() + " CREATED");
             return Response.ok(jsonResponseCreateSex).build();
@@ -125,9 +124,9 @@ public class SexImpl {
                 jsonResponseFail.put("message", "SEX " + jsonDataSex.getString("description").toUpperCase() + " NOT EXISTS");
                 return Response.ok(jsonResponseFail).build();
             }
-            Sex sex = sexRepository.sexFindById(id);
-            sex.description = description.toUpperCase();
-            sexRepository.sexUpdate(sex);
+            Gender gender = sexRepository.sexFindById(id);
+            gender.description = description.toUpperCase();
+            sexRepository.sexUpdate(gender);
             jsonResponseSexUpdate.put("message", "SEX " + description.toUpperCase() + " HAS UPDATE");
             Response response = Response.ok(jsonResponseSexUpdate).build();
             return Response.ok(response.getEntity()).build();

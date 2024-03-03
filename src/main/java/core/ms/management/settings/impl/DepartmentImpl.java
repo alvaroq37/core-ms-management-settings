@@ -33,7 +33,10 @@ public class DepartmentImpl {
 
     public Response saveDepartment(JsonObject jsonDepartment){
         try {
-            long country_id = Long.parseLong(jsonDepartment.getString("id"));
+
+            JsonObject jsonCountry;
+            jsonCountry = jsonDepartment.getJsonObject("country");
+            long country_id = jsonCountry.getLong("id");
             Country country = countryRepository.countryFindById(country_id);
 
             Department department = new Department();

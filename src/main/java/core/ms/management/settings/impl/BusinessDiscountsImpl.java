@@ -1,4 +1,56 @@
 package core.ms.management.settings.impl;
 
+import core.ms.management.settings.dao.entity.BusinessDiscounts;
+import core.ms.management.settings.dao.entity.City;
+import core.ms.management.settings.dao.entity.Department;
+import core.ms.management.settings.dao.repository.BusinessDiscountsRepository;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
+
+import java.util.List;
+
+@ApplicationScoped
 public class BusinessDiscountsImpl {
+
+    @Inject
+    BusinessDiscountsRepository businessDiscountsRepository;
+
+    public Response businessDiscountListAll(){
+        try {
+            List<BusinessDiscounts> businessDiscountsList = businessDiscountsRepository.businessDiscountsListAll();
+            JsonArray jsonArrayCityAll = new JsonArray(businessDiscountsList);
+            Response response = Response.ok(jsonArrayCityAll).build();
+            if (response.getStatus() == 200) {
+                if (businessDiscountsList.isEmpty()) {
+                    JsonObject jsonResponseCityAll = new JsonObject();
+                    jsonResponseCityAll.put("message", "LIST BUSINESS DISCOUNTS IS EMPTY");
+                    response = Response.ok(jsonResponseCityAll).build();
+                }
+                return Response.ok(response.getEntity()).build();
+            }
+        } catch (Exception e) {
+            return Response.ok(e.getMessage()).build();
+        }
+        return Response.serverError().build();
+
+    }
+
+    public Response saveBusinessDiscount(JsonObject jsonBusinessDiscount) {
+        try {
+            BusinessDiscounts businessDiscounts = new BusinessDiscounts();
+            businessDiscounts.description = jsonBusinessDiscount.getString("description").toUpperCase();
+            businessDiscounts.value = jsonBusinessDiscount.getFloat("value");
+            businessDiscounts.status = jsonBusinessDiscount.getBoolean("status");
+            businessDiscountsRepository.saveBusinessDiscount(businessDiscounts);
+            JsonObject jsonResponseCreateCity = new JsonObject();
+            jsonResponseCreateCity.put("message", "BUSINESS DISCOUNT " + jsonBusinessDiscount.getString("description").toUpperCase() + " CREATED");
+            return Response.ok(jsonResponseCreateCity).build();
+        } catch (Exception e) {
+            return Response.accepted(e.getMessage()).build();
+        }
+    }
 }
