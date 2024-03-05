@@ -1,10 +1,8 @@
 package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.City;
-import core.ms.management.settings.dao.entity.Country;
 import core.ms.management.settings.dao.entity.Department;
 import core.ms.management.settings.dao.repository.CityRepository;
-import core.ms.management.settings.dao.repository.CountryRepository;
 import core.ms.management.settings.dao.repository.DepartmentRepository;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;

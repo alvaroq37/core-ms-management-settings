@@ -10,8 +10,6 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -102,6 +100,39 @@ public class ClientCategoryImpl {
             return Response.ok(jsonResponseCreateCity).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();
+        }
+    }
+
+    public Response clientCategoryDelete(JsonObject jsonDataClientCategory) {
+        try {
+            JsonObject jsonResponseDeleteClientCategory = new JsonObject();
+            long id = Long.parseLong(jsonDataClientCategory.getString("id"));
+            long responseDelete = clientCategoryRepository.clientCategoryDelete(id);
+
+            if (responseDelete <= 0) {
+                jsonResponseDeleteClientCategory.put("message", "Categoría de cliente: " + jsonDataClientCategory.getString("description").toUpperCase() + " ID: "+ jsonDataClientCategory.getString("id") + " no existe");
+                return Response.ok(jsonResponseDeleteClientCategory).build();
+            }
+            jsonResponseDeleteClientCategory.put("message", "Cliente categoría " + jsonDataClientCategory.getString("description").toUpperCase() + " ha sido eliminado");
+            return Response.ok(jsonResponseDeleteClientCategory).build();
+        } catch (Exception e) {
+            return Response.ok(e.getMessage()).build();
+        }
+    }
+
+    public Response clientCategoryUpdate(JsonObject jsonDataClientCategory) {
+        try {
+            JsonObject jsonResponseUpdateClientCategory = new JsonObject();
+            ClientCategory clientCategory = new ClientCategory();
+            clientCategory.id = jsonDataClientCategory.getLong("id");
+            clientCategory.value = jsonDataClientCategory.getString("value");
+            clientCategory.description = jsonDataClientCategory.getString("description");
+            clientCategoryRepository.clientCategoryUpdate(clientCategory);
+            jsonResponseUpdateClientCategory.put("message", "Categoría de client " + jsonDataClientCategory.getString("description").toUpperCase() + " ha sido actualizado");
+            Response response = Response.ok(jsonResponseUpdateClientCategory).build();
+            return Response.ok(response.getEntity()).build();
+        } catch (Exception e) {
+            return Response.ok(e.getMessage()).build();
         }
     }
 }

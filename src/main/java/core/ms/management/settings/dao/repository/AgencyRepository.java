@@ -1,7 +1,6 @@
 package core.ms.management.settings.dao.repository;
 
 import core.ms.management.settings.dao.entity.Agency;
-import core.ms.management.settings.dao.entity.Client;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 

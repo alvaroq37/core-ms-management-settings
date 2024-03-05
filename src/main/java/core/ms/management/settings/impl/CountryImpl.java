@@ -3,7 +3,6 @@ package core.ms.management.settings.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.ms.management.settings.dao.entity.Country;
 import core.ms.management.settings.dao.repository.CountryRepository;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;

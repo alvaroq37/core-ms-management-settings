@@ -2,9 +2,11 @@ package core.ms.management.settings.dao.repository;
 
 import core.ms.management.settings.dao.entity.ClientCategory;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
 
+@ApplicationScoped
 public class ClientCategoryRepository implements PanacheRepository<ClientCategory> {
 
     public List<ClientCategory> clientCategoryListAll() {

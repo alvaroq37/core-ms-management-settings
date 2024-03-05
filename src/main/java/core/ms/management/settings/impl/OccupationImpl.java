@@ -3,14 +3,12 @@ package core.ms.management.settings.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.ms.management.settings.dao.entity.Occupation;
 import core.ms.management.settings.dao.repository.OccupationRepository;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
-import java.util.Locale;
 
 @ApplicationScoped
 public class OccupationImpl {

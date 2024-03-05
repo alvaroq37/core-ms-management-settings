@@ -1,10 +1,7 @@
 package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.BusinessDiscounts;
-import core.ms.management.settings.dao.entity.City;
-import core.ms.management.settings.dao.entity.Department;
 import core.ms.management.settings.dao.repository.BusinessDiscountsRepository;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;

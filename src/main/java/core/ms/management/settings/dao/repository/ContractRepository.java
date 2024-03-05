@@ -20,7 +20,6 @@ public class ContractRepository implements PanacheRepository<Contract> {
     public List<Contract> contractFindByAgency(long id){
         return list("agency_id", id).stream().toList();
     }
-
     public List<Contract> contractFindByClient(long id){
         return list("client_id", id).stream().toList();
     }
