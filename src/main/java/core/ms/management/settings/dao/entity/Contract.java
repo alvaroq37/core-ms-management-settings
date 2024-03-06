@@ -26,7 +26,7 @@ public class Contract {
     public Date dateUpdate;
 
     @Column(name = "user_create")
-    public int user_create;
+    public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
     @ManyToOne(targetEntity = BusinessDiscounts.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)

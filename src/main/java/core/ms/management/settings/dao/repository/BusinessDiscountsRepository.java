@@ -13,6 +13,8 @@ public class BusinessDiscountsRepository implements PanacheRepository<BusinessDi
         return listAll();
     }
 
+    public BusinessDiscounts businessDiscountsFindById(long id) {return find("id", id).firstResult();}
+
     public void saveBusinessDiscount(BusinessDiscounts businessDiscounts){
         persist(businessDiscounts);
     }
