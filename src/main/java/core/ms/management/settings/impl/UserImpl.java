@@ -1,10 +1,7 @@
 package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.*;
-import core.ms.management.settings.dao.repository.CityRepository;
-import core.ms.management.settings.dao.repository.OccupationRepository;
-import core.ms.management.settings.dao.repository.SexRepository;
-import core.ms.management.settings.dao.repository.UserRepository;
+import core.ms.management.settings.dao.repository.*;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -12,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +27,9 @@ public class UserImpl {
 
     @Inject
     SexRepository sexRepository;
+
+    @Inject
+    AgencyRepository agencyRepository;
 
     public Response userListAll() {
         try {
@@ -102,27 +103,36 @@ public class UserImpl {
     public Response userSave(JsonObject jsonDataUser) {
         try {
 
-            long idOccupation = jsonDataUser.getLong("occ_id");
-            long idCity = jsonDataUser.getLong("city_id");
-            long idGender = jsonDataUser.getLong("gender_id");
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
+            JsonObject jsonOccupation = jsonDataUser.getJsonObject("occupation");
+            JsonObject jsonGender = jsonDataUser.getJsonObject("gender");
+            JsonObject jsonCity = jsonDataUser.getJsonObject("city");
+            JsonObject jsonAgency = jsonDataUser.getJsonObject("agency");
+
+            long idOccupation = jsonOccupation.getLong("id");
+            long idCity = jsonCity.getLong("id");
+            long idGender = jsonGender.getLong("id");
+            long idAgency = jsonAgency.getLong("id");
 
             City city = cityRepository.cityFindById(idCity);
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
             Gender gender = sexRepository.sexFindById(idGender);
+            Agency agency = agencyRepository.agencyFindById(idAgency);
 
             User user = new User();
             user.ci = jsonDataUser.getString("ci");
             user.names = jsonDataUser.getString("names");
-            user.lastNamesPaternal = jsonDataUser.getString("last_name_paternal");
-            user.lastNamesMaternal = jsonDataUser.getString("last_name_maternal");
+            user.lastNamesPaternal = jsonDataUser.getString("lastNamesPaternal");
+            user.lastNamesMaternal = jsonDataUser.getString("lastNamesMaternal");
             user.address = jsonDataUser.getString("address");
-            user.cellPhone = jsonDataUser.getInteger("cell_phone");
-            user.phone = jsonDataUser.getInteger("phone");
+            user.cellPhone = Integer.parseInt(jsonDataUser.getString("cellPhone"));
+            user.phone = Integer.parseInt(jsonDataUser.getString("phone"));
             user.email = jsonDataUser.getString("email");
-            user.dateBirth = new Date();
+            user.dateBirth = formatDate.parse(jsonDataUser.getString("dateBirth"));
             user.city = city;
             user.occupation = occupation;
             user.gender = gender;
+            user.agency = agency;
 
             userRepository.userSave(user);
 

@@ -10,6 +10,8 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -90,13 +92,14 @@ public class ClientCategoryImpl {
 
             ClientCategory clientCategory = new ClientCategory();
             clientCategory.description = jsonDataClientCategory.getString("description");
-            clientCategory.value = jsonDataClientCategory.getString("description");
-            clientCategory.user_create = jsonDataClientCategory.getInteger("description");
-            clientCategory.userUpdate = jsonDataClientCategory.getInteger("description");
+            clientCategory.value = jsonDataClientCategory.getString("value");
+            clientCategory.user_create = jsonDataClientCategory.getInteger("user_create");
+            clientCategory.userUpdate = jsonDataClientCategory.getInteger("user_update");
+            clientCategory.dateCreate = new Date();
 
             clientCategoryRepository.clientCategorySave(clientCategory);
             JsonObject jsonResponseCreateCity = new JsonObject();
-            jsonResponseCreateCity.put("message", "Categoría de client " + jsonDataClientCategory.getString("description") + " registrada");
+            jsonResponseCreateCity.put("message", "Categoría de client " + jsonDataClientCategory.getString("value") + " registrada");
             return Response.ok(jsonResponseCreateCity).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();

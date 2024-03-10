@@ -31,7 +31,7 @@ public class CityImpl {
             if (response.getStatus() == 200) {
                 if (cityListAll.isEmpty()) {
                     JsonObject jsonResponseCityAll = new JsonObject();
-                    jsonResponseCityAll.put("message", "LIST CITY IS EMPTY");
+                    jsonResponseCityAll.put("message", "No existen ciudades registradas");
                     response = Response.ok(jsonResponseCityAll).build();
                 }
                 return Response.ok(response.getEntity()).build();
@@ -102,7 +102,7 @@ public class CityImpl {
             city.departament = department;
             cityRepository.citySave(city);
             JsonObject jsonResponseCreateCity = new JsonObject();
-            jsonResponseCreateCity.put("message", "CITY " + jsonDataCity.getString("name") + " CREATED");
+            jsonResponseCreateCity.put("message", "Ciudad " + jsonDataCity.getString("name") + " registrada");
             return Response.ok(jsonResponseCreateCity).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();

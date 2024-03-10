@@ -1,19 +1,15 @@
 package core.ms.management.settings.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.ms.management.settings.dao.entity.City;
-import core.ms.management.settings.dao.entity.Client;
-import core.ms.management.settings.dao.entity.Occupation;
-import core.ms.management.settings.dao.entity.Gender;
-import core.ms.management.settings.dao.repository.CityRepository;
-import core.ms.management.settings.dao.repository.ClientRepository;
-import core.ms.management.settings.dao.repository.OccupationRepository;
-import core.ms.management.settings.dao.repository.SexRepository;
+import core.ms.management.settings.dao.entity.*;
+import core.ms.management.settings.dao.repository.*;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +27,9 @@ public class ClientImpl {
 
     @Inject
     OccupationRepository occupationRepository;
+
+    @Inject
+    ClientCategoryRepository clientCategoryRepository;
 
     JsonObject jsonResponseFail = new JsonObject();
 
@@ -113,13 +112,24 @@ public class ClientImpl {
     public Response citySave(JsonObject jsonDataClient) {
         try {
 
-            long idCity = Long.parseLong(jsonDataClient.getString("idCity"));
-            long idSex = Long.parseLong(jsonDataClient.getString("idSex"));
-            long idOccupation = Long.parseLong(jsonDataClient.getString("idOccupation"));
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
+
+            JsonObject jsonOccupation = jsonDataClient.getJsonObject("occupation");
+            JsonObject jsonGender = jsonDataClient.getJsonObject("gender");
+            JsonObject jsonCity = jsonDataClient.getJsonObject("city");
+            JsonObject jsonClientCategory = jsonDataClient.getJsonObject("client_category");
+
+            long idOccupation = jsonOccupation.getLong("id");
+            long idCity = jsonCity.getLong("id");
+            long idGender = jsonGender.getLong("id");
+            long idCategory = jsonClientCategory.getLong("id");
+
+            String dateHappy = jsonDataClient.getString("dateBirth");
 
             City city = cityRepository.cityFindById(idCity);
-            Gender gender = sexRepository.sexFindById(idSex);
+            Gender gender = sexRepository.sexFindById(idGender);
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
+            ClientCategory clientCategory = clientCategoryRepository.clientCategoryFindById(idCategory);
 
             Client client = new Client();
             client.ci = jsonDataClient.getString("ci");
@@ -127,18 +137,18 @@ public class ClientImpl {
             client.address = jsonDataClient.getString("address").toUpperCase();
             client.email = jsonDataClient.getString("email");
             client.cellPhone = Integer.parseInt(jsonDataClient.getString("number_cell_phone"));
-            //TODO: Generar la lógica para parsear la fecha que llega en string
-            client.dateBirth = new Date();
+            client.dateBirth = formatDate.parse(dateHappy);
             client.lastNamesMaternal = jsonDataClient.getString("names_maternal").toUpperCase();
             client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
             client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
             client.city = city;
             client.gender = gender;
             client.occupation = occupation;
+            client.clientCategory = clientCategory;
 
             clientRepository.clientSave(client);
             JsonObject jsonResponseClientSave = new JsonObject();
-            jsonResponseClientSave.put("message", "CLIENT " + jsonDataClient.getString("name") + " CREATED");
+            jsonResponseClientSave.put("message", "Cliente " + jsonDataClient.getString("names") + " registrado");
             return Response.ok(jsonResponseClientSave).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();

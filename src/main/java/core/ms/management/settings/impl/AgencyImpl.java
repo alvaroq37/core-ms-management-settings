@@ -13,6 +13,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -98,17 +99,16 @@ public class AgencyImpl {
 
     public Response agencySave(JsonObject jsonDataAgency) {
         try {
-            long idCity = jsonDataAgency.getLong("city_id");
-            long idUser = jsonDataAgency.getLong("user_id");
+
+            JsonObject jsonCity = jsonDataAgency.getJsonObject("city");
+            long idCity = jsonCity.getLong("id");
             City city = cityRepository.cityFindById(idCity);
-            User user = userRepository.userFindById(idUser);
 
             Agency agency = new Agency();
             agency.name = jsonDataAgency.getString("name");
             agency.address = jsonDataAgency.getString("address");
             agency.user_create = jsonDataAgency.getInteger("user_create");
-            agency.userUpdate = jsonDataAgency.getInteger("user_update");
-            agency.user = user;
+            agency.dateCreate = new Date();
             agency.city = city;
             agencyRepository.agencySave(agency);
             JsonObject jsonResponseCreateAgency = new JsonObject();

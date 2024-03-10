@@ -9,7 +9,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/rest/agency")
+@Path("/rest/user")
 @Transactional
 @ApplicationScoped
 @Consumes(MediaType.APPLICATION_JSON)

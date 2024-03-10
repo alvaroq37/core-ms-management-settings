@@ -51,4 +51,7 @@ public class User {
     @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     public City city;
+    @ManyToOne(targetEntity = Agency.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "agency_id")
+    public Agency agency;
 }

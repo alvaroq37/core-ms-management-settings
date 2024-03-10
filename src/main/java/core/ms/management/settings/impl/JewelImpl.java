@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -33,18 +34,20 @@ public class JewelImpl{
 
     public Response jewelSave(JsonObject jsonJewel){
         try {
-            long material_id = Long.parseLong(jsonJewel.getString("material_id"));
+            JsonObject jsonMaterial = jsonJewel.getJsonObject("material");
+            long material_id = jsonMaterial.getLong("id");
             Material material = materialRepository.findById(material_id);
 
             Jewel jewel = new Jewel();
-            jewel.id = 0L;
             jewel.description = jsonJewel.getString("description");
+            jewel.dateCreate = new Date();
+            jewel.user_create = 1;
             jewel.material = material;
 
             jewelRepository.jewelSave(jewel);
 
             JsonObject jsonResponseCountrySave = new JsonObject();
-            jsonResponseCountrySave.put("message", "JEWEL CREATED");
+            jsonResponseCountrySave.put("message", "Joya registrada");
             return Response.ok(jsonResponseCountrySave).build();
         }
         catch (Exception e){

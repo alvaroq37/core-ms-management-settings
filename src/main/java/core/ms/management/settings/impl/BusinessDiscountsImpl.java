@@ -24,7 +24,7 @@ public class BusinessDiscountsImpl {
             if (response.getStatus() == 200) {
                 if (businessDiscountsList.isEmpty()) {
                     JsonObject jsonResponseCityAll = new JsonObject();
-                    jsonResponseCityAll.put("message", "LIST BUSINESS DISCOUNTS IS EMPTY");
+                    jsonResponseCityAll.put("message", "Lista de descuentos vacía");
                     response = Response.ok(jsonResponseCityAll).build();
                 }
                 return Response.ok(response.getEntity()).build();
@@ -40,11 +40,11 @@ public class BusinessDiscountsImpl {
         try {
             BusinessDiscounts businessDiscounts = new BusinessDiscounts();
             businessDiscounts.description = jsonBusinessDiscount.getString("description").toUpperCase();
-            businessDiscounts.value = jsonBusinessDiscount.getFloat("value");
+            businessDiscounts.value = Float.parseFloat(jsonBusinessDiscount.getString("value"));
             businessDiscounts.status = jsonBusinessDiscount.getBoolean("status");
             businessDiscountsRepository.saveBusinessDiscount(businessDiscounts);
             JsonObject jsonResponseCreateCity = new JsonObject();
-            jsonResponseCreateCity.put("message", "BUSINESS DISCOUNT " + jsonBusinessDiscount.getString("description").toUpperCase() + " CREATED");
+            jsonResponseCreateCity.put("message", "Descuento " + jsonBusinessDiscount.getString("description") + " registrado");
             return Response.ok(jsonResponseCreateCity).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();

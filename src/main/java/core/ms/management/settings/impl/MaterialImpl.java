@@ -8,6 +8,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -38,11 +40,16 @@ public class MaterialImpl {
 
     public Response materialSave(JsonObject jsonDataMaterial){
         try {
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
 
             Material material = new Material();
             material.description = jsonDataMaterial.getString("description");
-            material.karat = jsonDataMaterial.getInteger("karat");
+            material.karat = Integer.parseInt(jsonDataMaterial.getString("karat"));
+            material.price = Integer.parseInt(jsonDataMaterial.getString("price"));
             material.status = jsonDataMaterial.getBoolean("status");
+            material.dateCreate = new Date();
+            material.user_create = jsonDataMaterial.getInteger("user_create");
+            material.userUpdate = jsonDataMaterial.getInteger("user_update");
 
             materialRepository.materialSave(material);
 

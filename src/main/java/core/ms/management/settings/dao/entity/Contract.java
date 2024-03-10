@@ -14,8 +14,6 @@ public class Contract {
     public long id;
     @Column(name = "value")
     public float value;
-    @Column(name="currency")
-    public int currency;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_expiration")
@@ -41,4 +39,7 @@ public class Contract {
     @ManyToOne(targetEntity = Agency.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="agency_id")
     public Agency agency;
+    @ManyToOne(targetEntity = Currency.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name="currency_id")
+    public Currency currency;
 }

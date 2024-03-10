@@ -5,17 +5,17 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="t_agency")
-public class Agency {
+@Table(name = "t_currency")
+public class Currency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public long id;
-    @Column(name="name")
-    public String name;
-    @Column(name = "address")
-    public String address;
+    public Long id;
+    @Column(name = "desription")
+    public String description;
+    @Column(name = "abbreviation")
+    public String abbreviation;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
@@ -24,7 +24,4 @@ public class Agency {
     public int user_create;
     @Column(name = "user_update")
     public int userUpdate;
-    @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "city_id")
-    public City city;
 }
