@@ -67,7 +67,7 @@ public class CurrencyImpl {
             Currency currency = new Currency();
             currency.description = jsonDataCurrency.getString("description");
             currency.abbreviation = jsonDataCurrency.getString("abbreviation");
-            currency.user_create = jsonDataCurrency.getInteger("user_create");
+            currency.user_create = jsonDataCurrency.getInteger("userCreate");
             currency.dateCreate = new Date();
             currencyRepository.currencySave(currency);
             JsonObject jsonResponseCreateCurrency = new JsonObject();

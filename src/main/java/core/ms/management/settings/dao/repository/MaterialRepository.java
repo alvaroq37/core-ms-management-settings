@@ -1,5 +1,6 @@
 package core.ms.management.settings.dao.repository;
 
+import core.ms.management.settings.dao.entity.City;
 import core.ms.management.settings.dao.entity.Material;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,5 +16,9 @@ public class MaterialRepository implements PanacheRepository<Material> {
 
     public void materialSave(Material material){
         persist(material);
+    }
+
+    public Material materialFindById(long id) {
+        return find("id", id).firstResult();
     }
 }

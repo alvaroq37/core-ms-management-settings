@@ -36,10 +36,16 @@ public class JewelImpl{
         try {
             JsonObject jsonMaterial = jsonJewel.getJsonObject("material");
             long material_id = jsonMaterial.getLong("id");
-            Material material = materialRepository.findById(material_id);
+            Material material = materialRepository.materialFindById(material_id);
 
             Jewel jewel = new Jewel();
+            jewel.jewelType = Long.parseLong(jsonJewel.getString("jewel_type"));
+            jewel.jewel = jsonJewel.getString("jewel");
+            jewel.grossWeight = Float.parseFloat(jsonJewel.getString("gross_weight"));
+            jewel.netWeight = Float.parseFloat(jsonJewel.getString("net_weight"));
+            jewel.netWeightLoan = Float.parseFloat(jsonJewel.getString("net_weight_loan"));
             jewel.description = jsonJewel.getString("description");
+            jewel.numberParts = Long.parseLong(jsonJewel.getString("number_parts"));
             jewel.dateCreate = new Date();
             jewel.user_create = 1;
             jewel.material = material;

@@ -16,4 +16,6 @@ public class JewelRepository implements PanacheRepository<Jewel> {
     public void jewelSave(Jewel jewel){
         persist(jewel);
     }
+
+
 }

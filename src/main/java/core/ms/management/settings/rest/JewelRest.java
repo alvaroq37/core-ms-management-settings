@@ -28,6 +28,7 @@ public class JewelRest {
     @POST
     @Path("/save")
     public Response jewelSave(JsonObject jsonDataJewelCategory){
+
         return jewelImpl.jewelSave(jsonDataJewelCategory);
     }
 }

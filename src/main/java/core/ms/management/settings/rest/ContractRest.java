@@ -34,6 +34,7 @@ public class ContractRest {
     @POST
     @Path("/save")
     public Response contractSave(JsonObject jsonDataContract){
+
         return contractImpl.contractSave(jsonDataContract);
     }
 

@@ -20,9 +20,10 @@ public class Contract {
     public Date dateExpiration;
     @Column(name = "status")
     public boolean status;
+    @Column(name = "rate_interest")
+    public float rateInterest;
     @Column(name = "date_update")
     public Date dateUpdate;
-
     @Column(name = "user_create")
     public int userCreate;
     @Column(name = "user_update")
