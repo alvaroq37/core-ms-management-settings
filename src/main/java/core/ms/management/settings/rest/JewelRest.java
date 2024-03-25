@@ -26,10 +26,17 @@ public class JewelRest {
     }
 
     @POST
-    @Path("/save")
-    public Response jewelSave(JsonObject jsonDataJewelCategory){
+    @Path("/find/by/id")
+    public Response jewelFindByCi(JsonObject jsonDataJewel){
 
-        return jewelImpl.jewelSave(jsonDataJewelCategory);
+        return jewelImpl.jewelFindById(jsonDataJewel);
+    }
+
+    @POST
+    @Path("/save")
+    public Response jewelSave(JsonObject jsonDataJewel){
+
+        return jewelImpl.jewelSave(jsonDataJewel);
     }
 }
 

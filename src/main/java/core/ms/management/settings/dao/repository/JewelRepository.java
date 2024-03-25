@@ -13,6 +13,10 @@ public class JewelRepository implements PanacheRepository<Jewel> {
         return listAll();
     }
 
+    public List<Jewel> jewelFindById(long id){
+        return list("id", id).stream().toList();
+    }
+
     public void jewelSave(Jewel jewel){
         persist(jewel);
     }

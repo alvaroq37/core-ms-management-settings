@@ -26,7 +26,7 @@ public class ClientRest {
         return clientImpl.clientListAll();
     }
 
-    @GET
+    @POST
     @Path("/find/by/id")
     public Response clientFindById(JsonObject jsonClient) {
         return clientImpl.clientFindById(jsonClient);
@@ -38,8 +38,8 @@ public class ClientRest {
         return clientImpl.clientFindByCi(jsonClient);
     }
 
-    @GET
-    @Path("/find/by/name")
+    @POST
+    @Path("/find/by/names")
     public Response clientFindByNames(JsonObject jsonClient) {
         return clientImpl.clientFindByName(jsonClient);
     }
