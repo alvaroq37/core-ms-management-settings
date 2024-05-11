@@ -37,4 +37,7 @@ public class Jewel {
     public int user_create;
     @Column(name = "user_update")
     public int userUpdate;
+    @ManyToOne(targetEntity = Contract.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id")
+    public Contract contract;
 }

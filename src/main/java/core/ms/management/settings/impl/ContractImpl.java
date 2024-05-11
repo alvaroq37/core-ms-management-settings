@@ -35,6 +35,9 @@ public class ContractImpl {
     @Inject
     CurrencyRepository currencyRepository;
 
+    @Inject
+    MaterialRepository materialRepository;
+
 
     public Response contractListAll(){
         try{
@@ -84,13 +87,11 @@ public class ContractImpl {
             SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
 
             JsonObject jsonClient = jsonDataContract.getJsonObject("client");
-            JsonObject jsonJewel = jsonDataContract.getJsonObject("jewel");
             JsonObject jsonAgency = jsonDataContract.getJsonObject("agency");
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
             JsonObject jsonCurrency = jsonDataContract.getJsonObject("currency");
 
             long idClient = jsonClient.getLong("id");
-            long idJewel = jsonJewel.getLong("id");
             long idAgency = jsonAgency.getLong("id");
             long idBusinessDiscount = jsonDiscount.getLong("id");
             long idCurrency = jsonCurrency.getLong("id");
@@ -100,7 +101,6 @@ public class ContractImpl {
 
             Agency agency = agencyRepository.agencyFindById(idAgency);
             Client client = clientRepository.clientFindById(idClient);
-            Jewel jewel = jewelRepository.findById(idJewel);
             BusinessDiscounts businessDiscounts = businessDiscountsRepository.businessDiscountsFindById(idBusinessDiscount);
             Currency currency =currencyRepository.currencyFindById(idCurrency);
 
@@ -110,15 +110,35 @@ public class ContractImpl {
             contract.client = client;
             contract.agency = agency;
             contract.businessDiscounts = businessDiscounts;
-            contract.jewel = jewel;
             contract.currency = currency;
             contract.dateCreate = new Date();
             contract.dateExpiration = new Date();
             contract.value = Float.parseFloat(jsonDataContract.getString("value"));
             contract.userCreate = 0;
 
-            contractRepository.contractSave(contract);
 
+            Contract contractPersist = contractRepository.contractSave(contract);
+
+            JsonArray jsonArrayJewel = jsonDataContract.getJsonArray("jewel");
+
+            jsonArrayJewel.stream().forEach(j -> {
+                JsonObject jewel = (JsonObject) j;
+                Jewel jewelPersist = new Jewel();
+                jewelPersist.jewel = jewel.getString("jewel");
+                jewelPersist.jewelType = Long.parseLong(jewel.getString("jewel_type"));
+                jewelPersist.grossWeight = Float.parseFloat(jewel.getString("gross_weight"));
+                jewelPersist.netWeight = Float.parseFloat(jewel.getString("net_weight"));
+                jewelPersist.netWeightLoan = Float.parseFloat(jewel.getString("net_weight_loan"));
+                jewelPersist.description = jewel.getString("description");
+                jewelPersist.numberParts = Long.parseLong(jewel.getString("number_parts"));
+
+                JsonObject jsonMaterial = jewel.getJsonObject("material");
+                long idMaterial = jsonMaterial.getLong("id");
+                jewelPersist.material = materialRepository.materialFindById(idMaterial);
+                jewelPersist.contract = contractRepository.contractFindById(contractPersist.id);
+
+                jewelRepository.jewelSave(jewelPersist);
+            });
             JsonObject jsonResponseCreateContract = new JsonObject();
             jsonResponseCreateContract.put("message", "Contrato registrado correctamente");
             return Response.ok(jsonResponseCreateContract).build();
@@ -151,13 +171,11 @@ public class ContractImpl {
             SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
 
             JsonObject jsonClient = jsonDataContract.getJsonObject("client");
-            JsonObject jsonJewel = jsonDataContract.getJsonObject("jewel");
             JsonObject jsonAgency = jsonDataContract.getJsonObject("agency");
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
             JsonObject jsonCurrency = jsonDataContract.getJsonObject("currency");
 
             long idClient = jsonClient.getLong("id");
-            long idJewel = jsonJewel.getLong("id");
             long idAgency = jsonAgency.getLong("id");
             long idBusinessDiscount = jsonDiscount.getLong("id");
             long idCurrency = jsonCurrency.getLong("id");
@@ -167,7 +185,6 @@ public class ContractImpl {
 
             Agency agency = agencyRepository.agencyFindById(idAgency);
             Client client = clientRepository.clientFindById(idClient);
-            Jewel jewel = jewelRepository.findById(idJewel);
             BusinessDiscounts businessDiscounts = businessDiscountsRepository.businessDiscountsFindById(idBusinessDiscount);
             Currency currency =currencyRepository.currencyFindById(idCurrency);
 
@@ -176,7 +193,6 @@ public class ContractImpl {
             contract.client = client;
             contract.agency = agency;
             contract.businessDiscounts = businessDiscounts;
-            contract.jewel = jewel;
             contract.currency = currency;
             contract.dateUpdate = new Date();
             contract.dateExpiration = date_expiration;

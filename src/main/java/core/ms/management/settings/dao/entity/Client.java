@@ -14,6 +14,12 @@ public class Client {
     public String ci;
     @Column(name = "names")
     public String names;
+    @Column(name = "issued")
+    public String issued;
+    @Column(name = "zone")
+    public String zone;
+    @Column(name = "street_avenue")
+    public String streetAvenue;
     @Column(name = "last_name_paternal")
     public String lastNamesPaternal;
     @Column(name = "last_name_maternal")
@@ -28,16 +34,12 @@ public class Client {
     public String email;
     @Column(name = "date_birth")
     public Date dateBirth;
-
     @Column(name = "date_create")
     public Date dateCreate;
-
     @Column(name = "date_update")
     public Date dateUpdate;
-
     @Column(name = "user_create")
     public int user_create;
-
     @Column(name = "user_update")
     public int userUpdate;
 

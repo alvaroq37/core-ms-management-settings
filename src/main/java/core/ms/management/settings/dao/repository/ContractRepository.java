@@ -24,7 +24,10 @@ public class ContractRepository implements PanacheRepository<Contract> {
         return list("client_id", id).stream().toList();
     }
 
-   public void contractSave(Contract contract){persist(contract);}
+   public Contract contractSave(Contract contract){
+        persist(contract);
+        return contract;
+    }
 
     public Long contractDelete(long id){return delete("id", id);}
 

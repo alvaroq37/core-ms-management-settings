@@ -34,9 +34,6 @@ public class Contract {
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     public Client client;
-    @ManyToOne(targetEntity = Jewel.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "jewel_id")
-    public Jewel jewel;
     @ManyToOne(targetEntity = Agency.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="agency_id")
     public Agency agency;
