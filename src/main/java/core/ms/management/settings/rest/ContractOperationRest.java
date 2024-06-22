@@ -39,19 +39,19 @@ public class ContractOperationRest {
     }
 
     @POST
-    @Path("/save/contract/operation")
+    @Path("/save")
     public Response saveContractOperation(JsonObject jsonDataOperation){
         return contractOperationImpl.saveContractOperation(jsonDataOperation);
     }
 
     @PUT
-    @Path("/update/contract/operation")
+    @Path("/update")
     public Response updateContractOperation(JsonObject jsonDataOperation){
         return contractOperationImpl.updateContractOperation(jsonDataOperation);
     }
 
     @DELETE
-    @Path("/delete/contract/operation")
+    @Path("/delete")
     public Response deleteContractOperation(JsonObject jsonDataOperation){
         return contractOperationImpl.deleteContractOperation(jsonDataOperation);
     }

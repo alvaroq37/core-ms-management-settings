@@ -12,7 +12,8 @@ public class ContractOperation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public Long id;
-    @Column(name = "type_operation")
+    @ManyToOne(targetEntity = TypeOperation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_operation_id")
     public Long typeOperation;
     @Column(name = "capital_balance")
     public Double capitalBalance;
