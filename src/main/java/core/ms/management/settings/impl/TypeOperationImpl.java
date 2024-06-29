@@ -4,10 +4,13 @@ import core.ms.management.settings.dao.entity.Contract;
 import core.ms.management.settings.dao.entity.TypeOperation;
 import core.ms.management.settings.dao.repository.ContractRepository;
 import core.ms.management.settings.dao.repository.TypeOperationRepository;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.util.List;
 
 @ApplicationScoped
 public class TypeOperationImpl {
@@ -15,10 +18,28 @@ public class TypeOperationImpl {
     @Inject
     TypeOperationRepository typeOperationRepository;
 
+    public Response listAllTypeOperation(){
+       try{
+           List<TypeOperation> typeOperationList = typeOperationRepository.listAllTypeOperation();
+           JsonArray jsonArrayTypeOperation = new JsonArray(typeOperationList);
+           Response response = Response.ok(jsonArrayTypeOperation).build();
+           if(response.getStatus()==200){
+               if(typeOperationList.isEmpty()){
+                   JsonObject jsonResponseTypeOperationAll = new JsonObject();
+                   jsonResponseTypeOperationAll.put("message", "No existen tipo de operaciones registradas");
+                   response = Response.ok(jsonResponseTypeOperationAll).build();
+               }
+               return Response.ok(response.getEntity()).build();
+           }
+       }catch (Exception e){
+           return Response.ok(e.getMessage()).build();
+       }
+        return Response.serverError().build();
+    }
+
     public Response typeOperationSave(JsonObject jsonData){
         try {
             TypeOperation typeOperation = new TypeOperation();
-            typeOperation.id=0L;
             typeOperation.description=jsonData.getString("description");
 
             typeOperationRepository.typeOperationSave(typeOperation);

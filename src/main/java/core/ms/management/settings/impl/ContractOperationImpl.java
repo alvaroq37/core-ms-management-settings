@@ -1,21 +1,34 @@
 package core.ms.management.settings.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import core.ms.management.settings.dao.entity.Client;
 import core.ms.management.settings.dao.entity.Contract;
 import core.ms.management.settings.dao.entity.ContractOperation;
+import core.ms.management.settings.dao.entity.TypeOperation;
+import core.ms.management.settings.dao.repository.ClientRepository;
 import core.ms.management.settings.dao.repository.ContractOperationRepository;
 import core.ms.management.settings.dao.repository.ContractRepository;
+import core.ms.management.settings.dao.repository.TypeOperationRepository;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 @ApplicationScoped
 public class ContractOperationImpl {
 
     @Inject
     ContractOperationRepository contractOperationRepository;
+
+    @Inject
+    TypeOperationRepository typeOperationRepository;
+
+    @Inject
+    ClientRepository clientRepository;
 
     @Inject
     ContractRepository contractRepository;
@@ -36,6 +49,48 @@ public class ContractOperationImpl {
         return Response.ok(e.getMessage()).build();
     }
         return Response.serverError().build();
+    }
+
+    public Response searchContracts(JsonObject jsonDataOperation) throws JsonProcessingException {
+        String numberDocument = jsonDataOperation.getString("numberDocument");
+        String nameClient = jsonDataOperation.getString("nameClient");
+        JsonObject jsonResponseOperations = new JsonObject();
+        if(!numberDocument.isEmpty()){
+            Client client = clientRepository.clientFindByCi(numberDocument);
+            List<Contract> contractOperationList = contractRepository.contractFindByClient(client.id);
+            JsonArray jsonArrayContractOperations = new JsonArray(contractOperationList);
+            Response response = Response.ok(jsonArrayContractOperations).build();
+            if(response.getStatus() == 200){
+                if(jsonArrayContractOperations.isEmpty()){
+                    jsonResponseOperations.put("message", "No existe información registrada");
+                    response = Response.ok(jsonResponseOperations).build();
+                }
+                return Response.ok(response.getEntity()).build();
+            }
+        }else{
+            JsonArray jsonArrayNameClient = new JsonArray(clientRepository.contractFinByLastNamesPaternal(nameClient));
+            JsonArray arrayContractsNameClients = new JsonArray();
+            for (Object contractNameClient: jsonArrayNameClient){
+                Client client = (Client) contractNameClient;
+                JsonArray arrayNameClient = new JsonArray(contractRepository.contractFindByClient(client.id));
+                for(Object contractClient: arrayNameClient){
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String mapperContracts = objectMapper.writeValueAsString(contractClient);
+                    JsonObject finalArray = new JsonObject(mapperContracts);
+                    arrayContractsNameClients.add(finalArray);
+                }
+            }
+
+            Response response = Response.ok(arrayContractsNameClients).build();
+            if(response.getStatus() == 200){
+                if(arrayContractsNameClients.isEmpty()){
+                    jsonResponseOperations.put("message", "No existe información registrada");
+                    response = Response.ok(jsonResponseOperations).build();
+                }
+                return Response.ok(response.getEntity()).build();
+            }
+        }
+        return null;
     }
 
     public Response listContractOperationById(JsonObject jsonDataOperation){
@@ -79,18 +134,26 @@ public class ContractOperationImpl {
     public Response saveContractOperation(JsonObject jsonDataOperation){
     try{
         JsonObject jsonContract = jsonDataOperation.getJsonObject("contract");
-        Long id = jsonContract.getLong("id");
-        Date datePayment = new Date(jsonDataOperation.getLong("date_payment"));
-        Date dateNextPayment = new Date(jsonDataOperation.getLong("date_next_payment") + 30);
+        JsonObject jsonTypeOperation = jsonDataOperation.getJsonObject("typeOperation");
+        Long idContract = jsonContract.getLong("id");
+        Long idTypeOperation = jsonTypeOperation.getLong("id");
+        Date datePayment = new Date(jsonDataOperation.getLong("datePayment"));
+        Date dateStart = new Date(jsonDataOperation.getLong("dateStart"));
+        Date dateNextPayment = new Date(jsonDataOperation.getLong("dateNextPayment") + 30);
 
-        Contract contract = contractRepository.contractFindById(id);
+        Contract contract = contractRepository.contractFindById(idContract);
+        TypeOperation typeOperation = typeOperationRepository.findById(idTypeOperation);
         ContractOperation contractOperation = new ContractOperation();
-        contractOperation.capitalAvailable = jsonDataOperation.getDouble("capital_available");
-        contractOperation.typeOperation = jsonDataOperation.getLong("type_operation");
-        contractOperation.capitalBalance = jsonDataOperation.getDouble("capital_available");
-        contractOperation.date_next_payment = dateNextPayment;
+        contractOperation.amount = jsonTypeOperation.getDouble("amount");
+        contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
+        contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
+        contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
+        contractOperation.dateNextPayment = dateNextPayment;
         contractOperation.datePayment = datePayment;
+        contractOperation.dateStart = dateStart;
+        contractOperation.daysPassed=jsonDataOperation.getInteger("dayPassed");
         contractOperation.contract = contract;
+        contractOperation.typeOperation=typeOperation;
         contractOperationRepository.saveContractOperation(contractOperation);
 
         JsonObject jsonResponseCreateContract = new JsonObject();
@@ -121,20 +184,28 @@ public class ContractOperationImpl {
     public Response updateContractOperation(JsonObject jsonDataOperation){
         try{
             JsonObject jsonContract = jsonDataOperation.getJsonObject("contract");
-            Long id = jsonContract.getLong("id");
-            Date datePayment = new Date(jsonDataOperation.getLong("date_payment"));
-            Date dateNextPayment = new Date(jsonDataOperation.getLong("date_next_payment") + 30);
-            Contract contract = contractRepository.contractFindById(id);
+            JsonObject jsonTypeOperation = jsonDataOperation.getJsonObject("typeOperation");
+            Long idContract = jsonContract.getLong("id");
+            Long idTypeOperation = jsonTypeOperation.getLong("id");
+            Date datePayment = new Date(jsonDataOperation.getLong("datePayment"));
+            Date dateStart = new Date(jsonDataOperation.getLong("dateStart"));
+            Date dateNextPayment = new Date(jsonDataOperation.getLong("dateNextPayment") + 30);
 
+            Contract contract = contractRepository.contractFindById(idContract);
+            TypeOperation typeOperation = typeOperationRepository.findById(idTypeOperation);
             ContractOperation contractOperation = new ContractOperation();
             contractOperation.id = jsonDataOperation.getLong("id");
-            contractOperation.capitalAvailable = jsonDataOperation.getDouble("capital_available");
-            contractOperation.typeOperation = jsonDataOperation.getLong("type_operation");
-            contractOperation.capitalBalance = jsonDataOperation.getDouble("capital_available");
-            contractOperation.date_next_payment = dateNextPayment;
+            contractOperation.amount = jsonDataOperation.getDouble("amount");
+            contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
+            contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
+            contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
+            contractOperation.dateNextPayment = dateNextPayment;
             contractOperation.datePayment = datePayment;
+            contractOperation.dateStart = dateStart;
+            contractOperation.daysPassed=jsonDataOperation.getInteger("dayPassed");
             contractOperation.contract = contract;
-            contractOperationRepository.updateContractOperation(contractOperation);
+            contractOperation.typeOperation=typeOperation;
+            contractOperationRepository.saveContractOperation(contractOperation);
 
             JsonObject jsonResponseCreateContract = new JsonObject();
             jsonResponseCreateContract.put("message", "Operación Actualizada Correctamente");

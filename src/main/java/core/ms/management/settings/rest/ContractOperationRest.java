@@ -1,5 +1,6 @@
 package core.ms.management.settings.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import core.ms.management.settings.impl.ContractOperationImpl;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,16 +27,22 @@ public class ContractOperationRest {
         return contractOperationImpl.listAllContractOperation();
     }
 
-    @GET
+    @POST
     @Path("/find/by/id")
     public Response listContractOperationById(JsonObject jsonDataOperation){
         return contractOperationImpl.listContractOperationById(jsonDataOperation);
     }
 
-    @GET
+    @POST
     @Path("/find/by/id/contract")
     public Response listContractOperationByIdContract(JsonObject jsonDataOperation){
         return contractOperationImpl.listContractOperationByIdContract(jsonDataOperation);
+    }
+
+    @POST
+    @Path("/search/contracts")
+    public Response searchContracts(JsonObject jsonData) throws JsonProcessingException {
+        return contractOperationImpl.searchContracts(jsonData);
     }
 
     @POST

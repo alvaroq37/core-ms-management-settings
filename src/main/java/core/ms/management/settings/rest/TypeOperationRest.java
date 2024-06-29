@@ -19,6 +19,12 @@ public class TypeOperationRest {
     @Inject
     TypeOperationImpl typeOperationImpl;
 
+    @GET
+    @Path("/list/all")
+    public Response listAllTypeOperation(){
+        return typeOperationImpl.listAllTypeOperation();
+    }
+
     @POST
     @Path("/save")
     public Response saveTypeOperation(JsonObject jsonData){

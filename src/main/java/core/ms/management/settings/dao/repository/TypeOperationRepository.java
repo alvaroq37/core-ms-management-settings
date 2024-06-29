@@ -5,9 +5,14 @@ import core.ms.management.settings.dao.entity.TypeOperation;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
+
 @ApplicationScoped
 public class TypeOperationRepository implements PanacheRepository<TypeOperation> {
 
+    public List<TypeOperation> listAllTypeOperation(){
+        return listAll();
+    }
     public void typeOperationSave(TypeOperation typeOperation) {
         persist(typeOperation);
     }

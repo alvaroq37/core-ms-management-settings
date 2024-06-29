@@ -1,6 +1,7 @@
 package core.ms.management.settings.dao.repository;
 
 import core.ms.management.settings.dao.entity.Client;
+import core.ms.management.settings.dao.entity.Contract;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -26,6 +27,9 @@ public class ClientRepository implements PanacheRepository<Client> {
 
         return find("names", names).firstResult();
     }
+    public List<Client> contractFinByLastNamesPaternal(String lastNamesPaternal){
+        return find("lastNamesPaternal", lastNamesPaternal).stream().toList();}
+
     public void clientSave(Client client) {
         persist(client);
     }
