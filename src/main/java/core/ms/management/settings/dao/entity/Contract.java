@@ -40,4 +40,7 @@ public class Contract {
     @ManyToOne(targetEntity = Currency.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="currency_id")
     public Currency currency;
+    @ManyToOne(targetEntity = LoanType.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "loan_type_id")
+    public LoanType loanType;
 }

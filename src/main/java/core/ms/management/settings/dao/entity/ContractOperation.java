@@ -7,7 +7,6 @@ import java.util.Date;
 @Entity
 @Table(name = "t_contract_operation")
 public class ContractOperation {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -27,12 +26,32 @@ public class ContractOperation {
     public Date dateStart;
     @Column(name = "date_payment")
     public Date datePayment;
-    @Column(name = "date_next_payment")
-    public Date dateNextPayment;
     @Column(name = "days_passed")
     public Integer daysPassed;
     @Column(name="interest ")
     public Double interest;
+    @Column(name = "foreign_currency_interest")
+    public Double foreignCurrencyInterest;
+    @Column(name = "local_currency_interest")
+    public Double localCurrencyInterest;
+    @Column(name = "foreign_currency_capital_amortization")
+    public Double foreignCurrencyCapitalAmortization;
+    @Column(name = "local_currency_capital_amortization")
+    public Double localCurrencyCapitalAmortization;
+    @Column(name = "foreign_currency_previous_balance")
+    public Double foreignCurrencyPreviousBalance;
+    @Column(name = "local_currency_previous_balance")
+    public Double localCurrencyPreviousBalance;
+    @Column(name = "foreign_currency_new_capital_balance")
+    public Double foreignCurrencyNewCapitalBalance;
+    @Column(name = "local_currency_new_capital_balance")
+    public Double localCurrencyNewCapitalBalance;
+    @Column(name = "foreign_currency_expiration_service_cost")
+    public Double foreignCurrencyExpirationServiceCost;
+    @Column(name = "local_currency_expiration_service_cost")
+    public Double localCurrencyExpirationServiceCost;
+    @Column(name="next_expiration_date")
+    public Date nextExpirationDate;
     @ManyToOne(targetEntity = Contract.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id")
     public Contract contract;

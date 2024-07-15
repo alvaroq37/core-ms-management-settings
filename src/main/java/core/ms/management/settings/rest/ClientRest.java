@@ -47,7 +47,7 @@ public class ClientRest {
     @POST
     @Path("/save")
     public Response clientSave(JsonObject jsonClient) {
-        return clientImpl.citySave(jsonClient);
+        return clientImpl.clientSave(jsonClient);
     }
 
     @PUT

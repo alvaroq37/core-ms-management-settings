@@ -137,9 +137,9 @@ public class ContractOperationImpl {
         JsonObject jsonTypeOperation = jsonDataOperation.getJsonObject("typeOperation");
         Long idContract = jsonContract.getLong("id");
         Long idTypeOperation = jsonTypeOperation.getLong("id");
-        Date datePayment = new Date(jsonDataOperation.getLong("datePayment"));
-        Date dateStart = new Date(jsonDataOperation.getLong("dateStart"));
-        Date dateNextPayment = new Date(jsonDataOperation.getLong("dateNextPayment") + 30);
+        Date datePayment = new Date();
+        Date dateStart = new Date();
+        Date dateNextPayment = new Date();
 
         Contract contract = contractRepository.contractFindById(idContract);
         TypeOperation typeOperation = typeOperationRepository.findById(idTypeOperation);
@@ -148,10 +148,22 @@ public class ContractOperationImpl {
         contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
         contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
         contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
-        contractOperation.dateNextPayment = dateNextPayment;
+        contractOperation.nextExpirationDate = dateNextPayment;
         contractOperation.datePayment = datePayment;
         contractOperation.dateStart = dateStart;
         contractOperation.daysPassed=jsonDataOperation.getInteger("dayPassed");
+        contractOperation.foreignCurrencyCapitalAmortization = jsonDataOperation.getDouble("foreignCurrencyCapitalAmortization");
+        contractOperation.localCurrencyCapitalAmortization = jsonDataOperation.getDouble("localCurrencyCapitalAmortization");
+        contractOperation.foreignCurrencyExpirationServiceCost = jsonDataOperation.getDouble("foreignCurrencyExpirationServiceCost");
+        contractOperation.localCurrencyExpirationServiceCost = jsonDataOperation.getDouble("localCurrencyExpirationServiceCost");
+        contractOperation.foreignCurrencyInterest = jsonDataOperation.getDouble("foreignCurrencyInterest");
+        contractOperation.foreignCurrencyPreviousBalance = jsonDataOperation.getDouble("foreignCurrencyPreviousBalance");
+        contractOperation.foreignCurrencyNewCapitalBalance = jsonDataOperation.getDouble("foreignCurrencyNewCapitalBalance");
+        contractOperation.foreignCurrencyCapitalAmortization = jsonDataOperation.getDouble("foreignCurrencyCapitalAmortization");
+        contractOperation.localCurrencyInterest = jsonDataOperation.getDouble("localCurrencyInterest");
+        contractOperation.localCurrencyPreviousBalance = jsonDataOperation.getDouble("localCurrencyPreviousBalance");
+        contractOperation.localCurrencyNewCapitalBalance = jsonDataOperation.getDouble("localCurrencyNewCapitalBalance");
+        contractOperation.interest = jsonDataOperation.getDouble("interest");
         contractOperation.contract = contract;
         contractOperation.typeOperation=typeOperation;
         contractOperationRepository.saveContractOperation(contractOperation);
@@ -199,7 +211,7 @@ public class ContractOperationImpl {
             contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
             contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
             contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
-            contractOperation.dateNextPayment = dateNextPayment;
+            contractOperation.nextExpirationDate = dateNextPayment;
             contractOperation.datePayment = datePayment;
             contractOperation.dateStart = dateStart;
             contractOperation.daysPassed=jsonDataOperation.getInteger("dayPassed");

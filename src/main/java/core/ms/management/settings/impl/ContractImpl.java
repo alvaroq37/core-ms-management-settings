@@ -38,6 +38,9 @@ public class ContractImpl {
     @Inject
     MaterialRepository materialRepository;
 
+    @Inject
+    LoanTypeRepository loanTypeRepository;
+
 
     public Response contractListAll(){
         try{
@@ -90,11 +93,13 @@ public class ContractImpl {
             JsonObject jsonAgency = jsonDataContract.getJsonObject("agency");
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
             JsonObject jsonCurrency = jsonDataContract.getJsonObject("currency");
+            JsonObject jsonLoanType = jsonDataContract.getJsonObject("loan_type");
 
             long idClient = jsonClient.getLong("id");
             long idAgency = jsonAgency.getLong("id");
             long idBusinessDiscount = jsonDiscount.getLong("id");
             long idCurrency = jsonCurrency.getLong("id");
+            long idLoanType= jsonLoanType.getLong("id");
 
             String dExpiration = jsonDataContract.getString("date_expiration");
             Date date_expiration = formatDate.parse(dExpiration);
@@ -103,6 +108,7 @@ public class ContractImpl {
             Client client = clientRepository.clientFindById(idClient);
             BusinessDiscounts businessDiscounts = businessDiscountsRepository.businessDiscountsFindById(idBusinessDiscount);
             Currency currency =currencyRepository.currencyFindById(idCurrency);
+            LoanType loanType = loanTypeRepository.loanTypeFindById(idLoanType);
 
             Contract contract = new Contract();
             contract.status = jsonDataContract.getBoolean("status");
@@ -110,6 +116,7 @@ public class ContractImpl {
             contract.client = client;
             contract.agency = agency;
             contract.businessDiscounts = businessDiscounts;
+            contract.loanType = loanType;
             contract.currency = currency;
             contract.dateCreate = new Date();
             contract.dateExpiration = new Date();

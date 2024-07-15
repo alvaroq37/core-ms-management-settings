@@ -109,7 +109,7 @@ public class ClientImpl {
         return Response.serverError().build();
     }
 
-    public Response citySave(JsonObject jsonDataClient) {
+    public Response clientSave(JsonObject jsonDataClient) {
         try {
 
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
@@ -134,12 +134,14 @@ public class ClientImpl {
             Client client = new Client();
             client.ci = jsonDataClient.getString("ci");
             client.names = jsonDataClient.getString("names").toUpperCase();
-            client.address = jsonDataClient.getString("address").toUpperCase();
             client.email = jsonDataClient.getString("email");
             client.cellPhone = Integer.parseInt(jsonDataClient.getString("number_cell_phone"));
             client.dateBirth = formatDate.parse(dateHappy);
             client.lastNamesMaternal = jsonDataClient.getString("names_maternal").toUpperCase();
             client.lastNamesPaternal = jsonDataClient.getString("names_paternal").toUpperCase();
+            client.zone = jsonDataClient.getString("zone");
+            client.issued = jsonDataClient.getString("issued");
+            client.streetAvenue = jsonDataClient.getString("street_avenue");
             client.phone = Integer.parseInt(jsonDataClient.getString("number_phone"));
             client.city = city;
             client.gender = gender;
@@ -192,7 +194,6 @@ public class ClientImpl {
             Client client = clientRepository.clientFindById(Long.parseLong(jsonDataClient.getString("id")));
             client.ci = jsonDataClient.getString("ci");
             client.names = jsonDataClient.getString("names").toUpperCase();
-            client.address = jsonDataClient.getString("address").toUpperCase();
             client.email = jsonDataClient.getString("email");
             client.cellPhone = Integer.parseInt(jsonDataClient.getString("number_cell_phone"));
             //TODO: Generar la lógica para parsear la fecha que llega en string
