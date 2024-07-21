@@ -11,9 +11,6 @@ public class ContractOperation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public Long id;
-    @ManyToOne(targetEntity = TypeOperation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_operation_id")
-    public TypeOperation typeOperation;
     @JoinColumn(name = "amount")
     public Double amount;
     @Column(name = "capital_balance")
@@ -34,6 +31,10 @@ public class ContractOperation {
     public Double foreignCurrencyInterest;
     @Column(name = "local_currency_interest")
     public Double localCurrencyInterest;
+    @Column(name="foreign_currency_debt_custody_expenses")
+    public Double foreignCurrencyDebtCustodyExpenses;
+    @Column(name="local_currency_debt_custody_expenses")
+    public Double localCurrencyDebtCustodyExpenses;
     @Column(name = "foreign_currency_capital_amortization")
     public Double foreignCurrencyCapitalAmortization;
     @Column(name = "local_currency_capital_amortization")
@@ -52,9 +53,6 @@ public class ContractOperation {
     public Double localCurrencyExpirationServiceCost;
     @Column(name="next_expiration_date")
     public Date nextExpirationDate;
-    @ManyToOne(targetEntity = Contract.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contract_id")
-    public Contract contract;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
@@ -63,5 +61,11 @@ public class ContractOperation {
     public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
+    @ManyToOne(targetEntity = Contract.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contract_id")
+    public Contract contract;
+    @ManyToOne(targetEntity = TypeOperation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_operation_id")
+    public TypeOperation typeOperation;
 
 }

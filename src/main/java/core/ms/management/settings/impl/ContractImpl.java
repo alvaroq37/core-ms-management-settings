@@ -88,19 +88,16 @@ public class ContractImpl {
     public Response contractSave(JsonObject jsonDataContract) {
         try {
             SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
-
             JsonObject jsonClient = jsonDataContract.getJsonObject("client");
             JsonObject jsonAgency = jsonDataContract.getJsonObject("agency");
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
             JsonObject jsonCurrency = jsonDataContract.getJsonObject("currency");
             JsonObject jsonLoanType = jsonDataContract.getJsonObject("loan_type");
-
             long idClient = jsonClient.getLong("id");
             long idAgency = jsonAgency.getLong("id");
             long idBusinessDiscount = jsonDiscount.getLong("id");
             long idCurrency = jsonCurrency.getLong("id");
             long idLoanType= jsonLoanType.getLong("id");
-
             String dExpiration = jsonDataContract.getString("date_expiration");
             Date date_expiration = formatDate.parse(dExpiration);
 
