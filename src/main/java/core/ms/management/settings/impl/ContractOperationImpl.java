@@ -15,6 +15,8 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -132,26 +134,32 @@ public class ContractOperationImpl {
     }
 
     public Response saveContractOperation(JsonObject jsonDataOperation){
+        JsonObject jsonResponseCreateContract = new JsonObject();
     try{
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         JsonObject jsonContract = jsonDataOperation.getJsonObject("contract");
         JsonObject jsonTypeOperation = jsonDataOperation.getJsonObject("typeOperation");
         Long idContract = jsonContract.getLong("id");
         Long idTypeOperation = jsonTypeOperation.getLong("id");
         Date datePayment = new Date();
         Date dateStart = new Date();
-        Date dateNextPayment = new Date();
+        Date dateNextPayment = new Date();//simpleDateFormat.parse(jsonDataOperation.getString("nextExpirationDate"));
+        Date dateCreate = new Date();
 
         Contract contract = contractRepository.contractFindById(idContract);
         TypeOperation typeOperation = typeOperationRepository.findById(idTypeOperation);
         ContractOperation contractOperation = new ContractOperation();
-        contractOperation.amount = jsonTypeOperation.getDouble("amount");
+        contractOperation.amount = Double.parseDouble(jsonDataOperation.getString("amount"));
         contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
         contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
         contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
         contractOperation.nextExpirationDate = dateNextPayment;
         contractOperation.datePayment = datePayment;
         contractOperation.dateStart = dateStart;
-        contractOperation.daysPassed=jsonDataOperation.getInteger("dayPassed");
+        contractOperation.daysPassed=jsonDataOperation.getInteger("daysPassed");
+        contractOperation.dateCreate = dateCreate;
+        contractOperation.foreignCurrencyDebtCustodyExpenses = jsonDataOperation.getDouble("foreignCurrencyDebtCustodyExpenses");
+        contractOperation.localCurrencyDebtCustodyExpenses = jsonDataOperation.getDouble("localCurrencyDebtCustodyExpenses");
         contractOperation.foreignCurrencyCapitalAmortization = jsonDataOperation.getDouble("foreignCurrencyCapitalAmortization");
         contractOperation.localCurrencyCapitalAmortization = jsonDataOperation.getDouble("localCurrencyCapitalAmortization");
         contractOperation.foreignCurrencyExpirationServiceCost = jsonDataOperation.getDouble("foreignCurrencyExpirationServiceCost");
@@ -167,12 +175,10 @@ public class ContractOperationImpl {
         contractOperation.contract = contract;
         contractOperation.typeOperation=typeOperation;
         contractOperationRepository.saveContractOperation(contractOperation);
-
-        JsonObject jsonResponseCreateContract = new JsonObject();
         jsonResponseCreateContract.put("message", "Operación Registrada Correctamente");
         return Response.ok(jsonResponseCreateContract).build();
     } catch (Exception e) {
-        return Response.accepted(e.getMessage()).build();
+        return Response.accepted(jsonResponseCreateContract.put("message",e.getMessage())).build();
     }
     }
 
@@ -208,6 +214,7 @@ public class ContractOperationImpl {
             ContractOperation contractOperation = new ContractOperation();
             contractOperation.id = jsonDataOperation.getLong("id");
             contractOperation.amount = jsonDataOperation.getDouble("amount");
+            contractOperation.interest = jsonDataOperation.getDouble("interest");
             contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
             contractOperation.capitalAvailable = jsonDataOperation.getDouble("capitalAvailable");
             contractOperation.capitalBalance = jsonDataOperation.getDouble("capitalBalance");

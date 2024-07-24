@@ -63,18 +63,20 @@ public class CurrencyImpl {
     }
 
     public Response currencySave(JsonObject jsonDataCurrency) {
+        JsonObject jsonResponseCreateCurrency = new JsonObject();
         try {
             Currency currency = new Currency();
             currency.description = jsonDataCurrency.getString("description");
             currency.abbreviation = jsonDataCurrency.getString("abbreviation");
+            currency.purchaseExchangeRate = Double.parseDouble(jsonDataCurrency.getString("purchaseExchangeRate"));
+            currency.exchangeRateSale = Double.parseDouble(jsonDataCurrency.getString("exchangeRateSale"));
             currency.user_create = jsonDataCurrency.getInteger("userCreate");
             currency.dateCreate = new Date();
             currencyRepository.currencySave(currency);
-            JsonObject jsonResponseCreateCurrency = new JsonObject();
             jsonResponseCreateCurrency.put("message", "La moneda " + jsonDataCurrency.getString("description") + " ha sido registrada");
             return Response.ok(jsonResponseCreateCurrency).build();
         } catch (Exception e) {
-            return Response.accepted(e.getMessage()).build();
+            return Response.accepted(jsonResponseCreateCurrency.put("message",e.getMessage())).build();
         }
     }
 

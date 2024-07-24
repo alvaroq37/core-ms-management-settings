@@ -16,6 +16,10 @@ public class Currency {
     public String description;
     @Column(name = "abbreviation")
     public String abbreviation;
+    @Column(name = "purchase_exchange_rate")
+    public Double purchaseExchangeRate;
+    @Column(name = "exchange_rate_sale")
+    public Double exchangeRateSale;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
