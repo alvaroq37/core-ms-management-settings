@@ -13,7 +13,9 @@ public class Contract {
     @Column(name = "id")
     public long id;
     @Column(name = "value")
-    public float value;
+    public Double value;
+    @Column(name="capital_balance")
+    public Double capitalBalance;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_expiration")
@@ -21,7 +23,7 @@ public class Contract {
     @Column(name = "status")
     public boolean status;
     @Column(name = "rate_interest")
-    public float rateInterest;
+    public Double rateInterest;
     @Column(name = "date_update")
     public Date dateUpdate;
     @Column(name = "user_create")

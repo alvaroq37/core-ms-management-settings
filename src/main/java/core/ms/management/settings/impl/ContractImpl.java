@@ -109,7 +109,8 @@ public class ContractImpl {
 
             Contract contract = new Contract();
             contract.status = jsonDataContract.getBoolean("status");
-            contract.rateInterest = Float.parseFloat(jsonDataContract.getString("rate_interest"));
+            contract.rateInterest =Double.parseDouble(jsonDataContract.getString("rate_interest"));
+            contract.capitalBalance=jsonDataContract.getDouble("capital_balance");
             contract.client = client;
             contract.agency = agency;
             contract.businessDiscounts = businessDiscounts;
@@ -117,7 +118,7 @@ public class ContractImpl {
             contract.currency = currency;
             contract.dateCreate = new Date();
             contract.dateExpiration = new Date();
-            contract.value = Float.parseFloat(jsonDataContract.getString("value"));
+            contract.value = Double.parseDouble(jsonDataContract.getString("value"));
             contract.userCreate = 0;
 
 
@@ -200,9 +201,10 @@ public class ContractImpl {
             contract.currency = currency;
             contract.dateUpdate = new Date();
             contract.dateExpiration = date_expiration;
-            contract.value = jsonDataContract.getFloat("value");
+            contract.value = Double.parseDouble(jsonDataContract.getString("value"));
             contract.userUpdate = 1;
-            contract.rateInterest = jsonDataContract.getLong("rate_interest");
+            contract.rateInterest = Double.parseDouble(jsonDataContract.getString("rate_interest"));
+            contract.capitalBalance=jsonDataContract.getDouble("balance_capital");
 
             contractRepository.contractUpdate(contract);
 

@@ -148,6 +148,10 @@ public class ContractOperationImpl {
 
         Contract contract = contractRepository.contractFindById(idContract);
         TypeOperation typeOperation = typeOperationRepository.findById(idTypeOperation);
+
+        contract.capitalBalance = jsonDataOperation.getDouble("capitalBalance");
+        contractRepository.contractUpdate(contract);
+
         ContractOperation contractOperation = new ContractOperation();
         contractOperation.amount = Double.parseDouble(jsonDataOperation.getString("amount"));
         contractOperation.maximumRange = jsonDataOperation.getDouble("maximumRange");
