@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "t_gender")
-public class Gender {
-    @Id
+@Table(name = "t_jewel_type")
+public class JewelType {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    public long id;
-    @Column(name = "description")
+    @Id
+    @Column(name="id")
+    public Long id;
+    @Column(name="description")
     public String description;
+    @Column(name = "market_value")
+    public Long marketValue;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")

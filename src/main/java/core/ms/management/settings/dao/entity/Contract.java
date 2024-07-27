@@ -12,10 +12,12 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long id;
-    @Column(name = "value")
-    public Double value;
+    @Column(name = "maximum_range")
+    public Double maximumRange;
     @Column(name="capital_balance")
     public Double capitalBalance;
+    @Column(name = "available_capital")
+    public Double availableCapital;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_expiration")

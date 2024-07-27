@@ -70,7 +70,7 @@ public class CurrencyImpl {
             currency.abbreviation = jsonDataCurrency.getString("abbreviation");
             currency.purchaseExchangeRate = Double.parseDouble(jsonDataCurrency.getString("purchaseExchangeRate"));
             currency.exchangeRateSale = Double.parseDouble(jsonDataCurrency.getString("exchangeRateSale"));
-            currency.user_create = jsonDataCurrency.getInteger("userCreate");
+            currency.userCreate = jsonDataCurrency.getInteger("userCreate");
             currency.dateCreate = new Date();
             currencyRepository.currencySave(currency);
             jsonResponseCreateCurrency.put("message", "La moneda " + jsonDataCurrency.getString("description") + " ha sido registrada");
@@ -104,7 +104,7 @@ public class CurrencyImpl {
             currency.id = jsonDataCurrency.getLong("id");
             currency.description = jsonDataCurrency.getString("description");
             currency.abbreviation = jsonDataCurrency.getString("abbreviation");
-            currency.user_create = jsonDataCurrency.getInteger("user_create");
+            currency.userCreate = jsonDataCurrency.getInteger("user_create");
             currency.dateCreate = new Date();
             currencyRepository.currencySave(currency);
             jsonResponseUpdateCurrency.put("message", "La moneda " + jsonResponseUpdateCurrency.getString("description").toUpperCase() + " ha sido actualizada");

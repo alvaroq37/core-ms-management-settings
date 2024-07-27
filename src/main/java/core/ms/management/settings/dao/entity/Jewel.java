@@ -18,26 +18,27 @@ public class Jewel {
     public String description;
     @Column(name="number_parts")
     public long numberParts;
-    @Column(name="jewel_type")
-    public long jewelType;
     @Column(name="gross_weight")
     public float grossWeight;
     @Column(name="net_weight")
     public float netWeight;
     @Column(name="net_weight_loan")
     public float netWeightLoan;
-    @ManyToOne(targetEntity = Material.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "material_id")
-    public Material material;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
     public Date dateUpdate;
     @Column(name = "user_create")
-    public int user_create;
+    public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
+    @ManyToOne(targetEntity = Material.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "material_id")
+    public Material material;
     @ManyToOne(targetEntity = Contract.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "contract_id")
     public Contract contract;
+    @ManyToOne(targetEntity = JewelType.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "jewel_type_id")
+    public JewelType jewelType;
 }

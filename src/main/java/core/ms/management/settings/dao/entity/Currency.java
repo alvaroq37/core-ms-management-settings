@@ -24,8 +24,8 @@ public class Currency {
     public Date dateCreate;
     @Column(name = "date_update")
     public Date dateUpdate;
-    @Column(name = "user_create")
-    public int user_create;
+    @Column(name = "userCreate")
+    public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
 }

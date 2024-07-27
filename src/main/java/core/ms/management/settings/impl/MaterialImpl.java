@@ -48,7 +48,7 @@ public class MaterialImpl {
             material.price = Integer.parseInt(jsonDataMaterial.getString("price"));
             material.status = jsonDataMaterial.getBoolean("status");
             material.dateCreate = new Date();
-            material.user_create = jsonDataMaterial.getInteger("user_create");
+            material.userCreate = jsonDataMaterial.getInteger("user_create");
             material.userUpdate = jsonDataMaterial.getInteger("user_update");
 
             materialRepository.materialSave(material);

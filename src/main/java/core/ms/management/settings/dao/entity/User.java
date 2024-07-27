@@ -29,19 +29,14 @@ public class User {
     public String email;
     @Column(name = "date_birth")
     public Date dateBirth;
-
     @Column(name = "date_create")
     public Date dateCreate;
-
     @Column(name = "date_update")
     public Date dateUpdate;
-
     @Column(name = "user_create")
-    public int user_create;
-
+    public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
-
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "occ_id")
     public Occupation occupation;

@@ -18,7 +18,7 @@ public class TypeOperation {
     @Column(name = "date_update")
     public Date dateUpdate;
     @Column(name = "user_create")
-    public int user_create;
+    public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
 }

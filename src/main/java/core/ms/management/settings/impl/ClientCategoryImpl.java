@@ -93,7 +93,7 @@ public class ClientCategoryImpl {
             ClientCategory clientCategory = new ClientCategory();
             clientCategory.description = jsonDataClientCategory.getString("description");
             clientCategory.value = jsonDataClientCategory.getString("value");
-            clientCategory.user_create = jsonDataClientCategory.getInteger("user_create");
+            clientCategory.userCreate = jsonDataClientCategory.getInteger("user_create");
             clientCategory.userUpdate = jsonDataClientCategory.getInteger("user_update");
             clientCategory.dateCreate = new Date();
 

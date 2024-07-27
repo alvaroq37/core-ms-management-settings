@@ -107,7 +107,7 @@ public class AgencyImpl {
             Agency agency = new Agency();
             agency.name = jsonDataAgency.getString("name");
             agency.address = jsonDataAgency.getString("address");
-            agency.user_create = jsonDataAgency.getInteger("user_create");
+            agency.userCreate = jsonDataAgency.getInteger("user_create");
             agency.dateCreate = new Date();
             agency.city = city;
             agencyRepository.agencySave(agency);

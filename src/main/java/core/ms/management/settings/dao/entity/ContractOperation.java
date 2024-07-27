@@ -25,12 +25,14 @@ public class ContractOperation {
     public Date datePayment;
     @Column(name = "days_passed")
     public Integer daysPassed;
-    @Column(name="interest ")
-    public Double interest;
-    @Column(name = "foreign_currency_interest")
-    public Double foreignCurrencyInterest;
-    @Column(name = "local_currency_interest")
-    public Double localCurrencyInterest;
+    @Column(name="foreign_currency_interest_general")
+    public Double foreignCurrencyInterestGeneral;
+    @Column(name="local_currency_interest_general ")
+    public Double localCurrencyInterestGeneral;
+    @Column(name = "foreign_currency_interest_operation")
+    public Double foreignCurrencyInterestOperation;
+    @Column(name = "local_currency_interest_operation")
+    public Double localCurrencyInterestOperation;
     @Column(name="foreign_currency_debt_custody_expenses")
     public Double foreignCurrencyDebtCustodyExpenses;
     @Column(name="local_currency_debt_custody_expenses")

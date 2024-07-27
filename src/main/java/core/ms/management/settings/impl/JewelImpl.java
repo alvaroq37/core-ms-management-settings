@@ -1,8 +1,10 @@
 package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.Jewel;
+import core.ms.management.settings.dao.entity.JewelType;
 import core.ms.management.settings.dao.entity.Material;
 import core.ms.management.settings.dao.repository.JewelRepository;
+import core.ms.management.settings.dao.repository.JewelTypeRepository;
 import core.ms.management.settings.dao.repository.MaterialRepository;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -22,6 +24,9 @@ public class JewelImpl{
     @Inject
     MaterialRepository materialRepository;
 
+    @Inject
+    JewelTypeRepository jewelTypeRepository;
+
     public Response jewelListAll (){
         List<Jewel> jewelList = jewelRepository.jewelList();
         JsonArray jewelArray = new JsonArray(jewelList);
@@ -34,7 +39,7 @@ public class JewelImpl{
 
     public Response jewelFindById(JsonObject jsonJewel){
         try{
-            long id = Long.parseLong(jsonJewel.getString("id"));
+            Long id = Long.parseLong(jsonJewel.getString("id"));
             List<Jewel> jewel = jewelRepository.jewelFindById(id);
             JsonArray jewelArray = new JsonArray(jewel);
             Response response = Response.ok(jewelArray).build();
@@ -51,11 +56,14 @@ public class JewelImpl{
     public Response jewelSave(JsonObject jsonJewel){
         try {
             JsonObject jsonMaterial = jsonJewel.getJsonObject("material");
-            long material_id = jsonMaterial.getLong("id");
+            JsonObject jsonJewelType = jsonJewel.getJsonObject("jewel_type");
+            Long material_id = jsonMaterial.getLong("id");
+            Long jewel_type_id = jsonJewelType.getLong("id");
             Material material = materialRepository.materialFindById(material_id);
+            JewelType jewelType = jewelTypeRepository.findByIdJewelType(jewel_type_id);
 
             Jewel jewel = new Jewel();
-            jewel.jewelType = Long.parseLong(jsonJewel.getString("jewel_type"));
+            jewel.jewelType = jewelType;
             jewel.jewel = jsonJewel.getString("jewel");
             jewel.grossWeight = Float.parseFloat(jsonJewel.getString("gross_weight"));
             jewel.netWeight = Float.parseFloat(jsonJewel.getString("net_weight"));
@@ -63,7 +71,7 @@ public class JewelImpl{
             jewel.description = jsonJewel.getString("description");
             jewel.numberParts = Long.parseLong(jsonJewel.getString("number_parts"));
             jewel.dateCreate = new Date();
-            jewel.user_create = 1;
+            jewel.userCreate = 1;
             jewel.material = material;
 
             jewelRepository.jewelSave(jewel);

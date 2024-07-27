@@ -37,6 +37,7 @@ public class LoanTypeImpl {
             LoanType loanType =  new LoanType();
             loanType.id = 0;
             loanType.description = jsonDataLoanType.getString("description");
+            loanType.rate = Double.parseDouble(jsonDataLoanType.getString("rate"));
             loanTypeRepository.loanTypeSave(loanType);
             return Response.ok(jsonResponsePersist.put("message", "TIPO DE PRESTAMO REGISTRADO CORRECTAMENTE")).build();
         }catch (Exception e){

@@ -93,11 +93,11 @@ public class ContractImpl {
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
             JsonObject jsonCurrency = jsonDataContract.getJsonObject("currency");
             JsonObject jsonLoanType = jsonDataContract.getJsonObject("loan_type");
-            long idClient = jsonClient.getLong("id");
-            long idAgency = jsonAgency.getLong("id");
-            long idBusinessDiscount = jsonDiscount.getLong("id");
-            long idCurrency = jsonCurrency.getLong("id");
-            long idLoanType= jsonLoanType.getLong("id");
+            Long idClient = jsonClient.getLong("id");
+            Long idAgency = jsonAgency.getLong("id");
+            Long idBusinessDiscount = jsonDiscount.getLong("id");
+            Long idCurrency = jsonCurrency.getLong("id");
+            Long idLoanType= jsonLoanType.getLong("id");
             String dExpiration = jsonDataContract.getString("date_expiration");
             Date date_expiration = formatDate.parse(dExpiration);
 
@@ -118,7 +118,8 @@ public class ContractImpl {
             contract.currency = currency;
             contract.dateCreate = new Date();
             contract.dateExpiration = new Date();
-            contract.value = Double.parseDouble(jsonDataContract.getString("value"));
+            contract.maximumRange = Double.parseDouble(jsonDataContract.getString("maximum_range"));
+            contract.availableCapital = Double.parseDouble(jsonDataContract.getString("available_capital"));
             contract.userCreate = 0;
 
 
@@ -130,7 +131,6 @@ public class ContractImpl {
                 JsonObject jewel = (JsonObject) j;
                 Jewel jewelPersist = new Jewel();
                 jewelPersist.jewel = jewel.getString("jewel");
-                jewelPersist.jewelType = Long.parseLong(jewel.getString("jewel_type"));
                 jewelPersist.grossWeight = Float.parseFloat(jewel.getString("gross_weight"));
                 jewelPersist.netWeight = Float.parseFloat(jewel.getString("net_weight"));
                 jewelPersist.netWeightLoan = Float.parseFloat(jewel.getString("net_weight_loan"));
@@ -201,7 +201,7 @@ public class ContractImpl {
             contract.currency = currency;
             contract.dateUpdate = new Date();
             contract.dateExpiration = date_expiration;
-            contract.value = Double.parseDouble(jsonDataContract.getString("value"));
+            contract.maximumRange = Double.parseDouble(jsonDataContract.getString("value"));
             contract.userUpdate = 1;
             contract.rateInterest = Double.parseDouble(jsonDataContract.getString("rate_interest"));
             contract.capitalBalance=jsonDataContract.getDouble("balance_capital");
