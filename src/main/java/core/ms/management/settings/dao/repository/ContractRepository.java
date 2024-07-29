@@ -4,7 +4,9 @@ import core.ms.management.settings.dao.entity.Contract;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class ContractRepository implements PanacheRepository<Contract> {
@@ -19,7 +21,10 @@ public class ContractRepository implements PanacheRepository<Contract> {
         return list("agency_id", id).stream().toList();
     }
     public List<Contract> contractFindByClient(Long id){
-        return find("client.id", id).stream().toList();
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        params.put("status", true);
+        return find("client.id=:id and status=:status", params).stream().toList();
     }
    public Contract contractSave(Contract contract){
         persist(contract);

@@ -27,6 +27,9 @@ public class ContractImpl {
     JewelRepository jewelRepository;
 
     @Inject
+    JewelTypeRepository jewelTypeRepository;
+
+    @Inject
     BusinessDiscountsRepository businessDiscountsRepository;
 
     @Inject
@@ -110,19 +113,19 @@ public class ContractImpl {
             Contract contract = new Contract();
             contract.status = jsonDataContract.getBoolean("status");
             contract.rateInterest =Double.parseDouble(jsonDataContract.getString("rate_interest"));
-            contract.capitalBalance=jsonDataContract.getDouble("capital_balance");
+            contract.capitalBalance= Double.parseDouble(jsonDataContract.getString("capital_balance"));
             contract.client = client;
             contract.agency = agency;
             contract.businessDiscounts = businessDiscounts;
             contract.loanType = loanType;
             contract.currency = currency;
             contract.dateCreate = new Date();
-            contract.dateExpiration = new Date();
+            contract.dateExpiration = date_expiration;
             contract.maximumRange = Double.parseDouble(jsonDataContract.getString("maximum_range"));
             contract.availableCapital = Double.parseDouble(jsonDataContract.getString("available_capital"));
+            contract.loanAmount = Double.parseDouble(jsonDataContract.getString("loan_amount"));
             contract.userCreate = 0;
-
-
+            contract.status = true;
             Contract contractPersist = contractRepository.contractSave(contract);
 
             JsonArray jsonArrayJewel = jsonDataContract.getJsonArray("jewel");
@@ -138,8 +141,11 @@ public class ContractImpl {
                 jewelPersist.numberParts = Long.parseLong(jewel.getString("number_parts"));
 
                 JsonObject jsonMaterial = jewel.getJsonObject("material");
-                long idMaterial = jsonMaterial.getLong("id");
+                JsonObject jsonJewelType = jewel.getJsonObject("jewel_type");
+                Long idMaterial = jsonMaterial.getLong("id");
+                Long idJewelType = jsonJewelType.getLong("id");
                 jewelPersist.material = materialRepository.materialFindById(idMaterial);
+                jewelPersist.jewelType = jewelTypeRepository.findByIdJewelType(idJewelType);
                 jewelPersist.contract = contractRepository.contractFindById(contractPersist.id);
 
                 jewelRepository.jewelSave(jewelPersist);

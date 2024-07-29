@@ -56,10 +56,14 @@ public class JewelTypeImpl {
         try{
             JewelType jewelType = new JewelType();
             jewelType.description = jsonDataJewelType.getString("description");
-            jewelType.marketValue = jsonDataJewelType.getLong("marketValue");
+            jewelType.marketValue = Long.parseLong(jsonDataJewelType.getString("marketValue"));
             jewelType.dateCreate = new Date();
             jewelType.userCreate = 0;
 
+            jewelTypeRepository.saveJewelType(jewelType);
+            JsonObject jsonResponseJewelTypeResponse = new JsonObject();
+            jsonResponseJewelTypeResponse.put("message", "Tipo de joya " + jsonDataJewelType.getString("description") + " registrada correctamente");
+            return Response.ok(jsonResponseJewelTypeResponse).build();
         }catch(Exception e){
             Response.accepted(jsonResponse.put("message", e.getMessage())).build();
         }

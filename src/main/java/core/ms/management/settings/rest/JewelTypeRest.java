@@ -22,6 +22,7 @@ public class JewelTypeRest {
     @GET
     @Path("/find/all")
     public Response jewelListAll(){
+
         return jewelTypeImpl.listAllJewelType();
     }
 

@@ -12,6 +12,8 @@ public class Contract {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public long id;
+    @Column(name = "loan_amount")
+    public Double loanAmount;
     @Column(name = "maximum_range")
     public Double maximumRange;
     @Column(name="capital_balance")
