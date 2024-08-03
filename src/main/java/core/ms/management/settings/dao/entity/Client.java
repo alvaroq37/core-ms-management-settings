@@ -50,10 +50,10 @@ public class Client {
     public Gender gender;
 
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "occ_id")
+    @JoinColumn(name = "ocupation_id")
     public Occupation occupation;
 
     @ManyToOne(targetEntity = ClientCategory.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "cc_id")
+    @JoinColumn(name = "client_category_id")
     public ClientCategory clientCategory;
 }

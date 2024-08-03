@@ -134,9 +134,11 @@ public class ContractImpl {
                 JsonObject jewel = (JsonObject) j;
                 Jewel jewelPersist = new Jewel();
                 jewelPersist.jewel = jewel.getString("jewel");
-                jewelPersist.grossWeight = Float.parseFloat(jewel.getString("gross_weight"));
-                jewelPersist.netWeight = Float.parseFloat(jewel.getString("net_weight"));
-                jewelPersist.netWeightLoan = Float.parseFloat(jewel.getString("net_weight_loan"));
+                jewelPersist.grossWeight = Double.parseDouble(jewel.getString("gross_weight"));
+                jewelPersist.netWeight = Double.parseDouble(jewel.getString("net_weight"));
+                jewelPersist.netWeightLoan = Double.parseDouble(jewel.getString("net_weight_loan"));
+                jewelPersist.maximumRange = Double.parseDouble(jewel.getString("maximum_range"));
+                jewelPersist.agreedAmount = Double.parseDouble(jewel.getString("agreed_amount"));
                 jewelPersist.description = jewel.getString("description");
                 jewelPersist.numberParts = Long.parseLong(jewel.getString("number_parts"));
 
@@ -149,7 +151,14 @@ public class ContractImpl {
                 jewelPersist.contract = contractRepository.contractFindById(contractPersist.id);
 
                 jewelRepository.jewelSave(jewelPersist);
+
+
             });
+            //TODO: Implementar el find by id jewel para el reporte con contractPersit.id
+            List<Jewel> jewelListReport = jewelRepository.jewelFindById(contractPersist.id);
+            for(Jewel jewel: jewelListReport){
+                JsonObject listJewel = JsonObject.mapFrom(jewel);
+            }
             JsonObject jsonResponseCreateContract = new JsonObject();
             jsonResponseCreateContract.put("message", "Contrato registrado correctamente");
             return Response.ok(jsonResponseCreateContract).build();

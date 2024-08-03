@@ -14,7 +14,7 @@ public class JewelRepository implements PanacheRepository<Jewel> {
     }
 
     public List<Jewel> jewelFindById(long id){
-        return list("id", id).stream().toList();
+        return list("contract.id", id).stream().toList();
     }
 
     public void jewelSave(Jewel jewel){

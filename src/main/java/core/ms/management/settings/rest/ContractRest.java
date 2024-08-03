@@ -22,10 +22,11 @@ public class ContractRest {
     @GET
     @Path("/find/all")
     public Response clientCategoryListAll(){
+
         return contractImpl.contractListAll();
     }
 
-    @GET
+    @POST
     @Path("/find/id")
     public Response contractFindById(JsonObject jsonDataContract){
         return contractImpl.contractFindById(jsonDataContract);

@@ -65,9 +65,11 @@ public class JewelImpl{
             Jewel jewel = new Jewel();
             jewel.jewelType = jewelType;
             jewel.jewel = jsonJewel.getString("jewel");
-            jewel.grossWeight = Float.parseFloat(jsonJewel.getString("gross_weight"));
-            jewel.netWeight = Float.parseFloat(jsonJewel.getString("net_weight"));
-            jewel.netWeightLoan = Float.parseFloat(jsonJewel.getString("net_weight_loan"));
+            jewel.grossWeight = Double.parseDouble(jsonJewel.getString("gross_weight"));
+            jewel.netWeight = Double.parseDouble(jsonJewel.getString("net_weight"));
+            jewel.netWeightLoan = Double.parseDouble(jsonJewel.getString("net_weight_loan"));
+            jewel.maximumRange = Double.parseDouble(jsonJewel.getString("maximum_range"));
+            jewel.agreedAmount = Double.parseDouble(jsonJewel.getString("agreed_amount"));
             jewel.description = jsonJewel.getString("description");
             jewel.numberParts = Long.parseLong(jsonJewel.getString("number_parts"));
             jewel.dateCreate = new Date();

@@ -167,7 +167,7 @@ public class ContractOperationImpl {
         contractOperation.foreignCurrencyDebtCustodyExpenses = jsonDataOperation.getDouble("foreignCurrencyDebtCustodyExpenses");
         contractOperation.localCurrencyDebtCustodyExpenses = jsonDataOperation.getDouble("localCurrencyDebtCustodyExpenses");
         contractOperation.foreignCurrencyCapitalAmortization = jsonDataOperation.getDouble("foreignCurrencyCapitalAmortization");
-        contractOperation.localCurrencyCapitalAmortization = jsonDataOperation.getDouble("localCurrencyCapitalAmortization");
+        contractOperation.localCurrencyCapitalAmortization = Double.parseDouble(jsonDataOperation.getString("localCurrencyCapitalAmortization"));
         contractOperation.foreignCurrencyExpirationServiceCost = jsonDataOperation.getDouble("foreignCurrencyExpirationServiceCost");
         contractOperation.localCurrencyExpirationServiceCost = jsonDataOperation.getDouble("localCurrencyExpirationServiceCost");
         contractOperation.foreignCurrencyInterestOperation = jsonDataOperation.getDouble("foreignCurrencyInterestOperation");

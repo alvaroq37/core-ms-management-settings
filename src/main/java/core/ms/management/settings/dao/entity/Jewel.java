@@ -19,11 +19,15 @@ public class Jewel {
     @Column(name="number_parts")
     public long numberParts;
     @Column(name="gross_weight")
-    public float grossWeight;
+    public Double grossWeight;
     @Column(name="net_weight")
-    public float netWeight;
+    public Double netWeight;
     @Column(name="net_weight_loan")
-    public float netWeightLoan;
+    public Double netWeightLoan;
+    @Column(name="maximum_range")
+    public Double maximumRange;
+    @Column(name="agreed_amount")
+    public Double agreedAmount;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
