@@ -8,6 +8,8 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -28,7 +30,7 @@ public class SexImpl {
 
             if (response.getStatus() == 200) {
                 if (genderListAll.isEmpty()) {
-                    jsonResponseFail.put("message", "LIST SEX IS EMPTY");
+                    jsonResponseFail.put("message", "No existen generos registrados");
                     return Response.ok(jsonResponseFail).build();
                 }
                 return Response.ok(response.getEntity()).build();
@@ -44,7 +46,7 @@ public class SexImpl {
             long id = Long.parseLong(jsonDataSex.getString("id"));
             Gender gender = sexRepository.sexFindById(id);
             if(gender == null){
-                jsonResponseFail.put("message", "SEX  BY ID: " + id + " NOT EXISTS");
+                jsonResponseFail.put("message", "Género con Id: " + id + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
             JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(gender));
@@ -89,9 +91,10 @@ public class SexImpl {
         try {
             Gender gender = new Gender();
             gender.description = jsonDataSex.getString("description").toUpperCase();
+            gender.dateCreate = new Date();
             sexRepository.sexSave(gender);
             JsonObject jsonResponseCreateSex = new JsonObject();
-            jsonResponseCreateSex.put("message", "SEX " + jsonDataSex.getString("description").toUpperCase() + " CREATED");
+            jsonResponseCreateSex.put("message", "Género " + jsonDataSex.getString("description") + " registrado correctamente");
             return Response.ok(jsonResponseCreateSex).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();
@@ -105,10 +108,10 @@ public class SexImpl {
             long responseDelete = sexRepository.sexDelete(id);
 
             if (responseDelete <= 0) {
-                jsonResponseFail.put("message", "SEX " + jsonDataCity.getString("description").toUpperCase() + " NOT EXISTS");
+                jsonResponseFail.put("message", "Género " + jsonDataCity.getString("description") + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
-            jsonResponseDeleteSex.put("message", "SEX " + jsonDataCity.getString("description").toUpperCase() + " DELETE");
+            jsonResponseDeleteSex.put("message", "Género " + jsonDataCity.getString("description") + " ha sido eliminada correctamente");
             return Response.ok(jsonResponseDeleteSex).build();
         } catch (Exception e) {
             return Response.ok(e.getMessage()).build();
@@ -121,13 +124,14 @@ public class SexImpl {
             long id = Long.parseLong(jsonDataSex.getString("id"));
             String description = jsonDataSex.getString("description");
             if (id <= 0 || description == null) {
-                jsonResponseFail.put("message", "SEX " + jsonDataSex.getString("description").toUpperCase() + " NOT EXISTS");
+                jsonResponseFail.put("message", "Género " + jsonDataSex.getString("description") + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
             Gender gender = sexRepository.sexFindById(id);
             gender.description = description.toUpperCase();
+            gender.dateUpdate = new Date();
             sexRepository.sexUpdate(gender);
-            jsonResponseSexUpdate.put("message", "SEX " + description.toUpperCase() + " HAS UPDATE");
+            jsonResponseSexUpdate.put("message", "Género " + description + " ha sido actualizada correctamente");
             Response response = Response.ok(jsonResponseSexUpdate).build();
             return Response.ok(response.getEntity()).build();
         } catch (Exception e) {

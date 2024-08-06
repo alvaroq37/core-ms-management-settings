@@ -12,7 +12,6 @@ import jakarta.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 @ApplicationScoped
 public class ContractImpl {
@@ -30,7 +29,7 @@ public class ContractImpl {
     JewelTypeRepository jewelTypeRepository;
 
     @Inject
-    BusinessDiscountsRepository businessDiscountsRepository;
+    BusinessDiscountRepository businessDiscountRepository;
 
     @Inject
     AgencyRepository agencyRepository;
@@ -106,7 +105,7 @@ public class ContractImpl {
 
             Agency agency = agencyRepository.agencyFindById(idAgency);
             Client client = clientRepository.clientFindById(idClient);
-            BusinessDiscounts businessDiscounts = businessDiscountsRepository.businessDiscountsFindById(idBusinessDiscount);
+            BusinessDiscount businessDiscount = businessDiscountRepository.businessDiscountsFindById(idBusinessDiscount);
             Currency currency =currencyRepository.currencyFindById(idCurrency);
             LoanType loanType = loanTypeRepository.loanTypeFindById(idLoanType);
 
@@ -116,7 +115,7 @@ public class ContractImpl {
             contract.capitalBalance= Double.parseDouble(jsonDataContract.getString("capital_balance"));
             contract.client = client;
             contract.agency = agency;
-            contract.businessDiscounts = businessDiscounts;
+            contract.businessDiscount = businessDiscount;
             contract.loanType = loanType;
             contract.currency = currency;
             contract.dateCreate = new Date();
@@ -205,14 +204,14 @@ public class ContractImpl {
 
             Agency agency = agencyRepository.agencyFindById(idAgency);
             Client client = clientRepository.clientFindById(idClient);
-            BusinessDiscounts businessDiscounts = businessDiscountsRepository.businessDiscountsFindById(idBusinessDiscount);
+            BusinessDiscount businessDiscount = businessDiscountRepository.businessDiscountsFindById(idBusinessDiscount);
             Currency currency =currencyRepository.currencyFindById(idCurrency);
 
             Contract contract = new Contract();
             contract.status = jsonDataContract.getBoolean("status");
             contract.client = client;
             contract.agency = agency;
-            contract.businessDiscounts = businessDiscounts;
+            contract.businessDiscount = businessDiscount;
             contract.currency = currency;
             contract.dateUpdate = new Date();
             contract.dateExpiration = date_expiration;

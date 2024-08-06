@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "t_clients")
+@Table(name = "t_client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,17 +40,14 @@ public class Client {
     public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
-
     @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     public City city;
-
     @ManyToOne(targetEntity = Gender.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "gender_id")
     public Gender gender;
-
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ocupation_id")
+    @JoinColumn(name = "occupation_id")
     public Occupation occupation;
 
     @ManyToOne(targetEntity = ClientCategory.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)

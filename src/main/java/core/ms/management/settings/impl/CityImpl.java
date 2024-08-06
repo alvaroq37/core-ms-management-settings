@@ -23,89 +23,91 @@ public class CityImpl {
     @Inject
     DepartmentRepository departmentRepository;
 
+    JsonObject jsonResponse = new JsonObject();
+
     public Response cityListAll() {
         try {
             List<City> cityListAll = cityRepository.cityListAll();
             JsonArray jsonArrayCityAll = new JsonArray(cityListAll);
+            if (cityListAll.isEmpty()) {
+                jsonResponse.put("message", "No existen ciudades registradas");
+                return Response.ok(jsonResponse).build();
+            }
             Response response = Response.ok(jsonArrayCityAll).build();
             if (response.getStatus() == 200) {
-                if (cityListAll.isEmpty()) {
-                    JsonObject jsonResponseCityAll = new JsonObject();
-                    jsonResponseCityAll.put("message", "No existen ciudades registradas");
-                    response = Response.ok(jsonResponseCityAll).build();
-                }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response cityFindById(JsonObject jsonDataCity) {
         try {
-            JsonObject jsonCityFindById = new JsonObject();
             long id = Long.parseLong(jsonDataCity.getString("id"));
+            if(id < 0){
+                jsonResponse.put("message", "No se ingresó un parámetro de búsqueda");
+                return Response.ok(jsonResponse).build();
+            }
             City cityById = cityRepository.cityFindById(id);
             if (cityById == null) {
-                jsonCityFindById.put("message", "FIND CITY BY ID NOT EXISTS");
-                return Response.ok(jsonCityFindById).build();
+                jsonResponse.put("message", "La ciudad ingresada no se encuentra registrada");
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonArrayCityById = new JsonObject(Json.encode(cityById));
-            if (jsonArrayCityById.isEmpty()) {
-                jsonCityFindById.put("message", "FIND CITY BY NAME IS EMPTY");
-                return Response.ok(jsonCityFindById).build();
-            }
             Response response = Response.ok(jsonArrayCityById).build();
             if (response.getStatus() == 200) {
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response cityFindByName(JsonObject jsonDataCity) {
         try {
-            JsonObject jsonCityName = new JsonObject();
             String name = jsonDataCity.getString("name");
+            if(name.isEmpty()){
+                jsonResponse.put("message", "No se ingresó el nombre de la ciudad a buscar");
+                return Response.ok(jsonResponse).build();
+            }
             City cityName = cityRepository.cityFindByName(name);
             if (cityName == null) {
-                jsonCityName.put("message", "FIND CITY BY NAME NOT EXISTS");
-                return Response.ok(jsonCityName).build();
+                jsonResponse.put("message", "La ciudad: " + jsonDataCity.getString("name") + " no se encuentra registrada" );
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonResponseCityName = new JsonObject(Json.encode(cityName));
-            if (jsonResponseCityName.isEmpty()) {
-                jsonCityName.put("message", "REQUEST CITY BY NAME IS EMPTY");
-                return Response.ok(jsonCityName).build();
-            }
             Response response = Response.ok(jsonResponseCityName).build();
             if (response.getStatus() == 200) {
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response citySave(JsonObject jsonDataCity) {
         try {
-            JsonObject jsonDepartment;
-            jsonDepartment = jsonDataCity.getJsonObject("department");
-            long department_id = Long.parseLong(jsonDepartment.getString("id"));
-            Department department = departmentRepository.findDepartmentById(department_id);
-            City city = new City();
-            city.name = jsonDataCity.getString("name").toUpperCase();
-            city.dateCreate = new Date();
-            city.departament = department;
-            cityRepository.citySave(city);
-            JsonObject jsonResponseCreateCity = new JsonObject();
-            jsonResponseCreateCity.put("message", "Ciudad " + jsonDataCity.getString("name") + " registrada");
-            return Response.ok(jsonResponseCreateCity).build();
+            if(jsonDataCity.getJsonObject("department")!=null && jsonDataCity.getJsonObject("country")!=null && !jsonDataCity.getString("name").isEmpty()){
+                JsonObject jsonDepartment;
+                jsonDepartment = jsonDataCity.getJsonObject("department");
+                long department_id = Long.parseLong(jsonDepartment.getString("id"));
+                Department department = departmentRepository.findDepartmentById(department_id);
+                City city = new City();
+                city.name = jsonDataCity.getString("name");
+                city.dateCreate = new Date();
+                city.departament = department;
+                cityRepository.citySave(city);
+                jsonResponse.put("message", "Ciudad " + jsonDataCity.getString("name") + " registrada");
+                return Response.ok(jsonResponse).build();
+            }else{
+                return Response.ok(jsonResponse.put("message","No se pudo registrar la ciudad - Existen datos incompletos")).build();
+            }
         } catch (Exception e) {
-            return Response.accepted(e.getMessage()).build();
+            return Response.accepted(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 
@@ -114,37 +116,42 @@ public class CityImpl {
             JsonObject jsonResponseDeleteCity = new JsonObject();
             long id = Long.parseLong(jsonDataCity.getString("id"));
             long responseDelete = cityRepository.cityDelete(id);
-
             if (responseDelete <= 0) {
-                jsonResponseDeleteCity.put("message", "CITY: " + jsonDataCity.getString("name").toUpperCase() + " ID: "+ jsonDataCity.getString("id") + " NOT EXISTS");
-                return Response.ok(jsonResponseDeleteCity).build();
+                jsonResponse.put("message", "Ciudad: " + jsonDataCity.getString("name") + " no se encuentra registrada");
+                return Response.ok(jsonResponse).build();
             }
-            jsonResponseDeleteCity.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " DELETE");
+            jsonResponseDeleteCity.put("message", "Ciudad " + jsonDataCity.getString("name") + " eliminada correctamente");
             return Response.ok(jsonResponseDeleteCity).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 
     public Response cityUpdate(JsonObject jsonDataCity) {
         try {
-            JsonObject jsonResponseCityUpdate = new JsonObject();
-            long id = Long.parseLong(jsonDataCity.getString("id"));
-            long idDepartment = Long.parseLong(jsonDataCity.getString("idDepartment"));
-            City city = cityRepository.cityFindById(id);
-            Department department = departmentRepository.findDepartmentById(idDepartment);
-            if (city == null || department == null) {
-                jsonResponseCityUpdate.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " NOT EXISTS");
-                return Response.ok(jsonResponseCityUpdate).build();
+            if(jsonDataCity.getJsonObject("department")!=null && jsonDataCity.getJsonObject("country")!=null && !jsonDataCity.getString("name").isEmpty()){
+                long id = Long.parseLong(jsonDataCity.getString("id"));
+                long idDepartment = Long.parseLong(jsonDataCity.getString("idDepartment"));
+                if(id > 0 && idDepartment > 0){
+                    City city = cityRepository.cityFindById(id);
+                    Department department = departmentRepository.findDepartmentById(idDepartment);
+                    if (city == null || department == null) {
+                        jsonResponse.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " NOT EXISTS");
+                        return Response.ok(jsonResponse).build();
+                    }
+                    city.name = jsonDataCity.getString("name").toUpperCase();
+                    city.departament = department;
+                    cityRepository.cityUpdate(city);
+                    jsonResponse.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " HAS UPDATE");
+                    Response response = Response.ok(jsonResponse).build();
+                    return Response.ok(response.getEntity()).build();
+                }else{
+                    return Response.ok(jsonResponse.put("message","No se pudo actualizar el departamento - Existen datos incompletos")).build();
+                }
             }
-            city.name = jsonDataCity.getString("name").toUpperCase();
-            city.departament = department;
-            cityRepository.cityUpdate(city);
-            jsonResponseCityUpdate.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " HAS UPDATE");
-            Response response = Response.ok(jsonResponseCityUpdate).build();
-            return Response.ok(response.getEntity()).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
+        return Response.serverError().build();
     }
 }

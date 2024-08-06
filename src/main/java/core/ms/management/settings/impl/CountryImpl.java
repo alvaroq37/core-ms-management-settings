@@ -8,6 +8,8 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -27,13 +29,13 @@ public class CountryImpl {
 
             if (response.getStatus() == 200) {
                 if (countryListAll.isEmpty()) {
-                    jsonResponseFail.put("message", "LIST COUNTRY IS EMPTY");
+                    jsonResponseFail.put("message", "No existen paises registrados");
                     return Response.ok(jsonResponseFail).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponseFail.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
@@ -43,20 +45,16 @@ public class CountryImpl {
             long id = Long.parseLong(jsonDataCountry.getString("id"));
             Country country = countryRepository.countryFindById(id);
             if(country == null){
-                jsonResponseFail.put("message", "COUNTRY  BY ID: " + id + " NOT EXISTS");
+                jsonResponseFail.put("message", "País con Id: " + id + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
             JsonObject jsonArrayCountry = new JsonObject(mapper.writeValueAsString(country));
             Response response = Response.ok(jsonArrayCountry).build();
             if (response.getStatus() == 200) {
-                if (jsonArrayCountry.isEmpty()) {
-                    jsonResponseFail.put("message", "COUNTRY  BY ID: " + id + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
-                }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponseFail.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
@@ -66,34 +64,33 @@ public class CountryImpl {
             String name = jsonDataCountry.getString("name");
             Country country = countryRepository.countryFindByName(name);
             if(country == null){
-                jsonResponseFail.put("message", "COUNTRY  BY NAME: " + name.toUpperCase() + " NOT EXISTS");
+                jsonResponseFail.put("message", "País: " + name + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
             JsonObject jsonArrayCountry = new JsonObject(mapper.writeValueAsString(country));
-
-
-
             Response response = Response.ok(jsonArrayCountry).build();
             if (response.getStatus() == 200) {
-                if (jsonArrayCountry.isEmpty()) {
-                    jsonResponseFail.put("message", "COUNTRY  BY NAME: " + name.toUpperCase() + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
-                }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponseFail.put("message", e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response countrySave(JsonObject jsonDataCountry) {
         try {
-            Country country = new Country();
-            country.name = (jsonDataCountry.getString("name").toUpperCase());
-            countryRepository.countrySave(country);
             JsonObject jsonResponseCountrySave = new JsonObject();
-            jsonResponseCountrySave.put("message", "COUNTRY " + jsonDataCountry.getString("name").toUpperCase() + " CREATED");
+            Country country = new Country();
+            country.name = (jsonDataCountry.getString("name"));
+            country.dateCreate = new Date();
+            country.userCreate = 0;
+            if(!country.name.isEmpty()){
+                countryRepository.countrySave(country);
+                jsonResponseCountrySave.put("message", "País " + jsonDataCountry.getString("name") + " registrado");
+            }else{
+                jsonResponseCountrySave.put("message", "No se ingresó el nombre del país");
+            }
             return Response.ok(jsonResponseCountrySave).build();
         } catch (Exception e) {
             return Response.accepted(e.getMessage()).build();
@@ -107,13 +104,13 @@ public class CountryImpl {
             long responseDelete = countryRepository.countryDelete(id);
 
             if (responseDelete <= 0) {
-                jsonResponseFail.put("message", "COUNTRY " + jsonDataCity.getString("name").toUpperCase() + " NOT EXISTS");
+                jsonResponseFail.put("message", "País " + jsonDataCity.getString("name") + " no se encuentra registrado");
                 return Response.ok(jsonResponseFail).build();
             }
-            jsonResponseCountryDelete.put("message", "COUNTRY " + jsonDataCity.getString("name").toUpperCase() + " DELETE");
+            jsonResponseCountryDelete.put("message", "País: " + jsonDataCity.getString("name") + " ha sido eliminado correctamente");
             return Response.ok(jsonResponseCountryDelete).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponseFail.put("message", e.getMessage())).build();
         }
     }
 
@@ -123,17 +120,18 @@ public class CountryImpl {
             long id = Long.parseLong(jsonDataCountry.getString("id"));
             String name = jsonDataCountry.getString("name");
             if (id <= 0 || name == null) {
-                jsonResponseFail.put("message", "CLIENT " + jsonDataCountry.getString("name").toUpperCase() + " NOT EXISTS");
+                jsonResponseFail.put("message", "País " + jsonDataCountry.getString("name") + " no está registrado");
                 return Response.ok(jsonResponseFail).build();
             }
             Country country = countryRepository.countryFindById(id);
-            country.name = jsonDataCountry.getString("name").toUpperCase();
+            country.name = jsonDataCountry.getString("name");
+            country.dateUpdate = new Date();
             countryRepository.countryUpdate(country);
-            jsonResponseCountryUpdate.put("message", "COUNTRY " + name.toUpperCase() + " HAS UPDATE");
+            jsonResponseCountryUpdate.put("message", "País " + name + " actualizado correctamente");
             Response response = Response.ok(jsonResponseCountryUpdate).build();
             return Response.ok(response.getEntity()).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponseFail.put("message", e.getMessage())).build();
         }
     }
 }

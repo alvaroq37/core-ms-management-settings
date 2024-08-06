@@ -34,9 +34,9 @@ public class Contract {
     public int userCreate;
     @Column(name = "user_update")
     public int userUpdate;
-    @ManyToOne(targetEntity = BusinessDiscounts.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = BusinessDiscount.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "business_discount_id")
-    public BusinessDiscounts businessDiscounts;
+    public BusinessDiscount businessDiscount;
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     public Client client;

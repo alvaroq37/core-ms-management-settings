@@ -29,6 +29,8 @@ public class User {
     public String email;
     @Column(name = "date_birth")
     public Date dateBirth;
+    @Column(name="password")
+    public String password;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
@@ -38,7 +40,7 @@ public class User {
     @Column(name = "user_update")
     public int userUpdate;
     @ManyToOne(targetEntity = Occupation.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "occ_id")
+    @JoinColumn(name = "occupation_id")
     public Occupation occupation;
     @ManyToOne(targetEntity = Gender.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "gender_id")

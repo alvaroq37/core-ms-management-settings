@@ -1,7 +1,7 @@
 package core.ms.management.settings.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import core.ms.management.settings.impl.BusinessDiscountsImpl;
+import core.ms.management.settings.impl.BusinessDiscountImpl;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -15,20 +15,20 @@ import jakarta.ws.rs.core.Response;
 @ApplicationScoped
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class BusinessDiscountsRest {
+public class BusinessDiscountRest {
 
     @Inject
-    BusinessDiscountsImpl businessDiscountsImpl;
+    BusinessDiscountImpl businessDiscountImpl;
 
     @GET
     @Path("/find/all")
     public Response cityFindAll() throws JsonProcessingException {
-        return businessDiscountsImpl.businessDiscountListAll();
+        return businessDiscountImpl.businessDiscountListAll();
     }
 
     @POST
     @Path("/save")
     public Response citySave(JsonObject jsonBusinessDiscount) {
-        return businessDiscountsImpl.saveBusinessDiscount(jsonBusinessDiscount);
+        return businessDiscountImpl.saveBusinessDiscount(jsonBusinessDiscount);
     }
 }

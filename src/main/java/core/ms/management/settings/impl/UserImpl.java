@@ -102,7 +102,6 @@ public class UserImpl {
 
     public Response userSave(JsonObject jsonDataUser) {
         try {
-
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
             JsonObject jsonOccupation = jsonDataUser.getJsonObject("occupation");
             JsonObject jsonGender = jsonDataUser.getJsonObject("gender");
@@ -129,6 +128,7 @@ public class UserImpl {
             user.phone = Integer.parseInt(jsonDataUser.getString("phone"));
             user.email = jsonDataUser.getString("email");
             user.dateBirth = formatDate.parse(jsonDataUser.getString("dateBirth"));
+            user.password = jsonDataUser.getString("password");
             user.city = city;
             user.occupation = occupation;
             user.gender = gender;

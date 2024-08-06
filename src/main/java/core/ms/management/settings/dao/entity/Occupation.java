@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "t_occupations")
+@Table(name = "t_occupation")
 public class Occupation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

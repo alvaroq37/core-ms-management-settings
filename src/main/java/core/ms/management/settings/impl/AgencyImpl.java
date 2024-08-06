@@ -23,132 +23,136 @@ public class AgencyImpl {
     AgencyRepository agencyRepository;
 
     @Inject
-    UserRepository userRepository;
-
-    @Inject
     CityRepository cityRepository;
+
+    JsonObject jsonResponse = new JsonObject();
 
     public Response agencyListAll() {
         try {
-            List<Agency> agencyList = agencyRepository.agencyListAll();
-            JsonArray jsonAgency = new JsonArray(agencyList);
+            JsonArray jsonAgency = new JsonArray(agencyRepository.agencyListAll());
+            if (jsonAgency.isEmpty()) {
+                jsonResponse.put("message", "No existen agencias registradas");
+                return Response.ok(jsonResponse).build();
+            }
             Response response = Response.ok(jsonAgency).build();
             if (response.getStatus() == 200) {
-                if (agencyList.isEmpty()) {
-                    JsonObject jsonResponseAgencyAll = new JsonObject();
-                    jsonResponseAgencyAll.put("message", "No existe información registrada");
-                    response = Response.ok(jsonResponseAgencyAll).build();
-                }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response agencyFindById(JsonObject jsonDataAgency) {
         try {
-            JsonObject jsonAgency = new JsonObject();
             long id = Long.parseLong(jsonDataAgency.getString("id"));
-            Agency agency = agencyRepository.agencyFindById(id);
-
-            if (agency == null) {
-                jsonAgency.put("message", "No existe la información solicitada");
-                return Response.ok(jsonAgency).build();
-            }
-            JsonObject jsonArrayAgencyById = new JsonObject(Json.encode(agency));
-            if (jsonArrayAgencyById.isEmpty()) {
-                jsonAgency.put("message", "No existe la información solicitada");
-                return Response.ok(jsonAgency).build();
-            }
-            Response response = Response.ok(jsonArrayAgencyById).build();
-            if (response.getStatus() == 200) {
-                return Response.ok(response.getEntity()).build();
+            if(id > 0){
+                Agency agency = agencyRepository.agencyFindById(id);
+                if (agency == null) {
+                    jsonResponse.put("message", "No existe la agencia solicitada");
+                    return Response.ok(jsonResponse).build();
+                }
+                JsonObject jsonArrayAgencyById = new JsonObject(Json.encode(agency));
+                Response response = Response.ok(jsonArrayAgencyById).build();
+                if (response.getStatus() == 200) {
+                    return Response.ok(response.getEntity()).build();
+                }
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response agencyFindByName(JsonObject jsonDataAgency) {
         try {
-            JsonObject jsonAgencyName = new JsonObject();
             String name = jsonDataAgency.getString("name");
-            Agency agency = agencyRepository.agencyFindByName(name);
-
-            if (agency == null) {
-                jsonAgencyName.put("message", "No existe la información solicitada");
-                return Response.ok(jsonAgencyName).build();
-            }
-            JsonObject jsonResponseAgencyName = new JsonObject(Json.encode(agency));
-            if (jsonResponseAgencyName.isEmpty()) {
-                jsonAgencyName.put("message", "No existe la información solicitada");
-                return Response.ok(jsonAgencyName).build();
-            }
-            Response response = Response.ok(jsonResponseAgencyName).build();
-            if (response.getStatus() == 200) {
-                return Response.ok(response.getEntity()).build();
+            if(!name.isEmpty()){
+                Agency agency = agencyRepository.agencyFindByName(name);
+                if (agency == null) {
+                    jsonResponse.put("message", "No existe la agencia solicitada");
+                    return Response.ok(jsonResponse).build();
+                }
+                JsonObject jsonResponseAgencyName = new JsonObject(Json.encode(agency));
+                Response response = Response.ok(jsonResponseAgencyName).build();
+                if (response.getStatus() == 200) {
+                    return Response.ok(response.getEntity()).build();
+                }
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response agencySave(JsonObject jsonDataAgency) {
         try {
+            if(jsonDataAgency.getJsonObject("city")!=null && !jsonDataAgency.getString("name").isEmpty()){
+                JsonObject jsonCity = jsonDataAgency.getJsonObject("city");
+                long idCity = jsonCity.getLong("id");
+                if(idCity > 0){
+                    City city = cityRepository.cityFindById(idCity);
 
-            JsonObject jsonCity = jsonDataAgency.getJsonObject("city");
-            long idCity = jsonCity.getLong("id");
-            City city = cityRepository.cityFindById(idCity);
+                    Agency agency = new Agency();
+                    agency.name = jsonDataAgency.getString("name");
+                    agency.address = jsonDataAgency.getString("address");
+                    agency.userCreate = jsonDataAgency.getInteger("user_create");
+                    agency.dateCreate = new Date();
+                    agency.city = city;
+                    agencyRepository.agencySave(agency);
 
-            Agency agency = new Agency();
-            agency.name = jsonDataAgency.getString("name");
-            agency.address = jsonDataAgency.getString("address");
-            agency.userCreate = jsonDataAgency.getInteger("user_create");
-            agency.dateCreate = new Date();
-            agency.city = city;
-            agencyRepository.agencySave(agency);
-            JsonObject jsonResponseCreateAgency = new JsonObject();
-            jsonResponseCreateAgency.put("message", "Agencia " + jsonDataAgency.getString("name") + " registrada");
-            return Response.ok(jsonResponseCreateAgency).build();
+                    jsonResponse.put("message", "Agencia " + jsonDataAgency.getString("name") + " registrada correctamente");
+                    return Response.ok(jsonResponse).build();
+                }else{
+                    return Response.ok(jsonResponse.put("message","No se pudo registrar la agencia - Existen datos incompletos")).build();
+                }
+
+            }else{
+                return Response.ok(jsonResponse.put("message","No se pudo registrar la agencia - Existen datos incompletos")).build();
+            }
         } catch (Exception e) {
-            return Response.accepted(e.getMessage()).build();
+            return Response.accepted(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 
     public Response agencyDelete(JsonObject jsonDataAgency) {
         try {
-            JsonObject jsonResponseDeleteAgency = new JsonObject();
-            long id = Long.parseLong(jsonDataAgency.getString("id"));
-            long responseDelete = agencyRepository.agencyDelete(id);
-
-            if (responseDelete <= 0) {
-                jsonResponseDeleteAgency.put("message", "Agencia: " + jsonDataAgency.getString("name") + " ID: "+ jsonDataAgency.getString("id") + " no existe");
-                return Response.ok(jsonResponseDeleteAgency).build();
+            if(jsonDataAgency.isEmpty()){
+                return Response.ok(jsonResponse.put("message","No se cuentan con datos para realizar la transacción")).build();
             }
-            jsonResponseDeleteAgency.put("message", "Agencia " + jsonResponseDeleteAgency.getString("name") + " ha sido eliminado");
-            return Response.ok(jsonResponseDeleteAgency).build();
+            long id = Long.parseLong(jsonDataAgency.getString("id"));
+            if(id > 0){
+                long responseDelete = agencyRepository.agencyDelete(id);
+                if (responseDelete <= 0) {
+                    jsonResponse.put("message", "Agencia: " + jsonDataAgency.getString("name") + " ID: "+ jsonDataAgency.getString("id") + " no existe");
+                    return Response.ok(jsonResponse).build();
+                }
+                jsonResponse.put("message", "Agencia " + jsonResponse.getString("name") + " ha sido eliminado");
+                return Response.ok(jsonResponse).build();
+            }else{
+                return Response.ok(jsonResponse.put("message","No se pudo eliminar la agencia")).build();
+            }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 
     public Response agencyUpdate(JsonObject jsonDataAgency) {
         try {
-            JsonObject jsonResponseUpdateAgency= new JsonObject();
+            if(jsonDataAgency.isEmpty()){
+                return Response.ok(jsonResponse.put("message","No se cuentan con datos para realizar la transacción")).build();
+            }
             Agency agency = new Agency();
             agency.id = jsonDataAgency.getLong("id");
             agency.name = jsonDataAgency.getString("name");
             agency.address = jsonDataAgency.getString("address");
             agencyRepository.agencyUpdate(agency);
-            jsonResponseUpdateAgency.put("message", "Agencia " + jsonResponseUpdateAgency.getString("name").toUpperCase() + " ha sido actualizada");
-            Response response = Response.ok(jsonResponseUpdateAgency).build();
+            jsonResponse.put("message", "Agencia " + jsonResponse.getString("name") + " actualizada correctamente");
+            Response response = Response.ok(jsonResponse).build();
             return Response.ok(response.getEntity()).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 }
