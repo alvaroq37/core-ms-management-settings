@@ -25,13 +25,13 @@ public class UserRest {
         return userImpl.userListAll();
     }
 
-    @GET
+    @POST
     @Path("/find/by/id")
     public Response userFindById(JsonObject jsonDataUser){
         return userImpl.userFindById(jsonDataUser);
     }
 
-    @GET
+    @POST
     @Path("/find/by/name")
     public Response userFindByName(JsonObject jsonDataUser){
         return userImpl.userFindByName(jsonDataUser);

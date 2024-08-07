@@ -31,77 +31,81 @@ public class UserImpl {
     @Inject
     AgencyRepository agencyRepository;
 
+    JsonObject jsonResponse = new JsonObject();
+
     public Response userListAll() {
         try {
-            List<User> userList = userRepository.agencyListAll();
-            JsonArray jsonUser = new JsonArray(userList);
+            JsonArray jsonUser = new JsonArray(userRepository.agencyListAll());
+            if (jsonUser.isEmpty()) {
+                jsonResponse.put("message", "No existen usuarios registrados");
+                return Response.ok(jsonResponse).build();
+            }
             Response response = Response.ok(jsonUser).build();
             if (response.getStatus() == 200) {
-                if (userList.isEmpty()) {
-                    JsonObject jsonResponseUserAll = new JsonObject();
-                    jsonResponseUserAll.put("message", "No existe información registrada");
-                    response = Response.ok(jsonResponseUserAll).build();
-                }
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response userFindById(JsonObject jsonDataUser) {
         try {
-            JsonObject jsonUser = new JsonObject();
+            if(jsonDataUser.isEmpty() && jsonDataUser.getString("id").isEmpty()){
+                return Response.ok(jsonResponse.put("message", "No existe información suficiente para realizar la búsqueda")).build();
+            }
             long id = Long.parseLong(jsonDataUser.getString("id"));
+            if(id <= 0){
+                return Response.ok(jsonResponse.put("message", "No existe información suficiente para realizar la búsqueda")).build();
+            }
             User user = userRepository.userFindById(id);
-
             if (user == null) {
-                jsonUser.put("message", "No existe la información solicitada");
-                return Response.ok(jsonUser).build();
+                jsonResponse.put("message", "No existe el usuario solicitado");
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonArrayUserById = new JsonObject(Json.encode(user));
-            if (jsonArrayUserById.isEmpty()) {
-                jsonUser.put("message", "No existe la información solicitada");
-                return Response.ok(jsonUser).build();
-            }
             Response response = Response.ok(jsonArrayUserById).build();
             if (response.getStatus() == 200) {
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response userFindByName(JsonObject jsonDataUser) {
         try {
-            JsonObject jsonUserName = new JsonObject();
-            String name = jsonDataUser.getString("name");
-            User user = userRepository.userFindByName(name);
-
+            if(jsonDataUser.isEmpty() && jsonDataUser.getString("email").isEmpty() && jsonDataUser.getString("password").isEmpty()){
+                return Response.ok(jsonResponse.put("message", "No existe información suficiente para realizar la búsqueda")).build();
+            }
+            String email = jsonDataUser.getString("email");
+            String password = jsonDataUser.getString("password");
+            if(email.isEmpty() && password.isEmpty()){
+                return Response.ok(jsonResponse.put("message", "No existe información suficiente para realizar la búsqueda")).build();
+            }
+            User user = userRepository.userFindByName(email, password);
             if (user == null) {
-                jsonUserName.put("message", "No existe la información solicitada");
-                return Response.ok(jsonUserName).build();
+                jsonResponse.put("message", "No existe el usuario solicitado");
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonResponseUserName = new JsonObject(Json.encode(user));
-            if (jsonResponseUserName.isEmpty()) {
-                jsonUserName.put("message", "No existe la información solicitada");
-                return Response.ok(jsonUserName).build();
-            }
             Response response = Response.ok(jsonResponseUserName).build();
             if (response.getStatus() == 200) {
                 return Response.ok(response.getEntity()).build();
             }
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
         return Response.serverError().build();
     }
 
     public Response userSave(JsonObject jsonDataUser) {
         try {
+            if(jsonDataUser.isEmpty() && jsonDataUser.getJsonObject("occupation").isEmpty() && jsonDataUser.getJsonObject("gender").isEmpty() && jsonDataUser.getJsonObject("city").isEmpty() && jsonDataUser.getJsonObject("agency").isEmpty()){
+                return Response.ok(jsonResponse.put("message","No existe información suficiente para realizar a búsqueda")).build();
+            }
             SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
             JsonObject jsonOccupation = jsonDataUser.getJsonObject("occupation");
             JsonObject jsonGender = jsonDataUser.getJsonObject("gender");
@@ -113,10 +117,17 @@ public class UserImpl {
             long idGender = jsonGender.getLong("id");
             long idAgency = jsonAgency.getLong("id");
 
+            if(idAgency <= 0 && idCity <= 0 && idGender <= 0 && idOccupation <= 0){
+                return Response.ok(jsonResponse.put("message","No existe información suficiente para realizar a búsqueda")).build();
+            }
             City city = cityRepository.cityFindById(idCity);
             Occupation occupation = occupationRepository.occupationFindById(idOccupation);
             Gender gender = sexRepository.sexFindById(idGender);
             Agency agency = agencyRepository.agencyFindById(idAgency);
+
+            if(city == null && occupation == null && gender == null && agency == null){
+                return Response.ok(jsonResponse.put("message","No existe información suficiente para realizar a búsqueda")).build();
+            }
 
             User user = new User();
             user.ci = jsonDataUser.getString("ci");

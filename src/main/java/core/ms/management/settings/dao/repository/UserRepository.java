@@ -3,7 +3,10 @@ package core.ms.management.settings.dao.repository;
 import core.ms.management.settings.dao.entity.User;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class UserRepository implements PanacheRepository<User> {
@@ -16,8 +19,11 @@ public class UserRepository implements PanacheRepository<User> {
         return find("id", id).firstResult();
     }
 
-    public User userFindByName(String name){
-        return find("name", name).firstResult();
+    public User userFindByName(String email, String password){
+        Map<String, Object> params = new HashMap<>();
+        params.put("email", email);
+        params.put("password", password);
+        return find("email=:email and password=:password", params).firstResult();
     }
 
     public List<User> userFindByOccupation(Long id){
