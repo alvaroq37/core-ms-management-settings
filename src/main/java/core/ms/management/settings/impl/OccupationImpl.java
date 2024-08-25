@@ -14,7 +14,7 @@ import java.util.List;
 public class OccupationImpl {
     @Inject
     OccupationRepository occupationRepository;
-    JsonObject jsonResponseFail = new JsonObject();
+    JsonObject jsonResponse = new JsonObject();
     ObjectMapper mapper = new ObjectMapper();
     public Response occupationListAll() {
         try {
@@ -24,15 +24,15 @@ public class OccupationImpl {
 
             if (response.getStatus() == 200) {
                 if (occupationListAll.isEmpty()) {
-                    jsonResponseFail.put("message", "LIST OCCUPATIONS EMPTY");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "No existen ocupaciones registradas");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
+            return Response.ok(jsonResponse.put("message","Servicio no disponible")).build();
         } catch (Exception e) {
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
-        return Response.serverError().build();
     }
 
     public Response occupationFindById(JsonObject jsonDataCountry) {
@@ -40,22 +40,22 @@ public class OccupationImpl {
             long id = Long.parseLong(jsonDataCountry.getString("id"));
             Occupation occupation = occupationRepository.occupationFindById(id);
             if(occupation == null){
-                jsonResponseFail.put("message", "OCCUPATION  BY ID: " + id + " NOT EXISTS");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Ocupación: " + id + " no registrada");
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonArrayOccupationId = new JsonObject(mapper.writeValueAsString(occupation));
             Response response = Response.ok(jsonArrayOccupationId).build();
             if (response.getStatus() == 200) {
                 if (jsonArrayOccupationId.isEmpty()) {
-                    jsonResponseFail.put("message", "OCCUPATION  BY ID: " + id + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "Ocupación: " + id + " no registrada");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
+            return Response.ok(jsonResponse.put("message","Servicio no disponible")).build();
         } catch (Exception e) {
             return Response.ok(e.getMessage()).build();
         }
-        return Response.serverError().build();
     }
 
     public Response occupationFindByName(JsonObject jsonDataCountry) {
@@ -63,22 +63,22 @@ public class OccupationImpl {
             String description = jsonDataCountry.getString("description");
             Occupation occupation = occupationRepository.occupationFindByName(description);
             if(occupation == null){
-                jsonResponseFail.put("message", "OCCUPATION  BY NAME: " + description.toUpperCase() + " NOT EXISTS");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Ocupación: " + description + " no registrada");
+                return Response.ok(jsonResponse).build();
             }
             JsonObject jsonArrayCountryName = new JsonObject(mapper.writeValueAsString(occupation));
             Response response = Response.ok(jsonArrayCountryName).build();
             if (response.getStatus() == 200) {
                 if (jsonArrayCountryName.isEmpty()) {
-                    jsonResponseFail.put("message", "OCCUPATION  BY NAME: " + description.toUpperCase() + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "Ocupación: " + description + " no registrada");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
+            return Response.ok(jsonResponse.put("message","Servicio no disponible")).build();
         } catch (Exception e) {
             return Response.ok(e.getMessage()).build();
         }
-        return Response.serverError().build();
     }
 
     public Response occupationSave(JsonObject jsonDataCountry) {
@@ -87,10 +87,10 @@ public class OccupationImpl {
             occupation.description = jsonDataCountry.getString("description");
             occupationRepository.occupationSave(occupation);
             JsonObject jsonResponseOccupationSave = new JsonObject();
-            jsonResponseOccupationSave.put("message", "OCCUPATION " + jsonDataCountry.getString("description").toUpperCase() + " CREATED");
+            jsonResponseOccupationSave.put("message", "Ocupación " + jsonDataCountry.getString("description") + " registrada correctamente");
             return Response.ok(jsonResponseOccupationSave).build();
         } catch (Exception e) {
-            return Response.accepted(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message",e.getMessage())).build();
         }
     }
 
@@ -101,10 +101,10 @@ public class OccupationImpl {
             long responseDelete = occupationRepository.occupationDelete(id);
 
             if (responseDelete <= 0) {
-                jsonResponseFail.put("message", "OCCUPATION " + jsonDataCity.getString("description").toUpperCase() + " NOT EXISTS");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Ocupación " + jsonDataCity.getString("description") + " no registrada");
+                return Response.ok(jsonResponse).build();
             }
-            jsonResponseCountryDelete.put("message", "OCCUPATION " + jsonDataCity.getString("description").toUpperCase() + " DELETE");
+            jsonResponseCountryDelete.put("message", "Ocupación " + jsonDataCity.getString("description") + " eliminada correctamente");
             return Response.ok(jsonResponseCountryDelete).build();
         } catch (Exception e) {
             return Response.ok(e.getMessage()).build();
@@ -117,12 +117,12 @@ public class OccupationImpl {
             long id = Long.parseLong(jsonDataCountry.getString("id"));
             String description = jsonDataCountry.getString("description");
             if (id <= 0 || description == null) {
-                jsonResponseFail.put("message", "OCCUPATION " + jsonDataCountry.getString("description").toUpperCase() + " NOT EXISTS");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Ocupación " + jsonDataCountry.getString("description") + " no registrada");
+                return Response.ok(jsonResponse).build();
             }
             Occupation occupation = occupationRepository.occupationFindById(id);
             occupation.description = description;
-            jsonResponseOccupationUpdate.put("message", "OCCUPATION " + description.toUpperCase() + " HAS UPDATE");
+            jsonResponseOccupationUpdate.put("message", "Ocupación " + description.toUpperCase() + " actualizada correctamente");
             Response response = Response.ok(jsonResponseOccupationUpdate).build();
             return Response.ok(response.getEntity()).build();
         } catch (Exception e) {

@@ -136,17 +136,17 @@ public class CityImpl {
                     City city = cityRepository.cityFindById(id);
                     Department department = departmentRepository.findDepartmentById(idDepartment);
                     if (city == null || department == null) {
-                        jsonResponse.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " NOT EXISTS");
+                        jsonResponse.put("message", "Ciudad " + jsonDataCity.getString("name") + " no registrada");
                         return Response.ok(jsonResponse).build();
                     }
                     city.name = jsonDataCity.getString("name").toUpperCase();
                     city.departament = department;
                     cityRepository.cityUpdate(city);
-                    jsonResponse.put("message", "CITY " + jsonDataCity.getString("name").toUpperCase() + " HAS UPDATE");
+                    jsonResponse.put("message", "Ciudad " + jsonDataCity.getString("name") + " actualizada correctamente");
                     Response response = Response.ok(jsonResponse).build();
                     return Response.ok(response.getEntity()).build();
                 }else{
-                    return Response.ok(jsonResponse.put("message","No se pudo actualizar el departamento - Existen datos incompletos")).build();
+                    return Response.ok(jsonResponse.put("message","No se pudo actualizar la ciudad - Existen datos incompletos")).build();
                 }
             }
         } catch (Exception e) {

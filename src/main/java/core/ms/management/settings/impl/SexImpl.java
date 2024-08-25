@@ -3,6 +3,7 @@ package core.ms.management.settings.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.ms.management.settings.dao.entity.Gender;
 import core.ms.management.settings.dao.repository.SexRepository;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -18,9 +19,7 @@ public class SexImpl {
     @Inject
     SexRepository sexRepository;
 
-    JsonObject jsonResponseFail = new JsonObject();
-
-    ObjectMapper mapper = new ObjectMapper();
+    JsonObject jsonResponse = new JsonObject();
 
     public Response SexListAll() {
         try {
@@ -30,8 +29,8 @@ public class SexImpl {
 
             if (response.getStatus() == 200) {
                 if (genderListAll.isEmpty()) {
-                    jsonResponseFail.put("message", "No existen generos registrados");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "No existen generos registrados");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
@@ -46,15 +45,15 @@ public class SexImpl {
             long id = Long.parseLong(jsonDataSex.getString("id"));
             Gender gender = sexRepository.sexFindById(id);
             if(gender == null){
-                jsonResponseFail.put("message", "Género con Id: " + id + " no se encuentra registrado");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Género: " + id + " no se encuentra registrado");
+                return Response.ok(jsonResponse).build();
             }
-            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(gender));
+            JsonObject jsonArraySex = new JsonObject(Json.encode(gender));
             Response response = Response.ok(jsonArraySex).build();
             if (response.getStatus() == 200) {
                 if (jsonArraySex.isEmpty()) {
-                    jsonResponseFail.put("message", "SEX  BY ID: " + id + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "Género: " + id + " no se encuentra registrado");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
@@ -69,15 +68,15 @@ public class SexImpl {
             String description = jsonDataSex.getString("description");
             Gender gender = sexRepository.sexFindByDescription(description);
             if(gender == null){
-                jsonResponseFail.put("message", "SEX  BY NAME: " + description.toUpperCase() + " NOT EXISTS");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Género: " + description + " no se encuentra registrado");
+                return Response.ok(jsonResponse).build();
             }
-            JsonObject jsonArraySex = new JsonObject(mapper.writeValueAsString(gender));
+            JsonObject jsonArraySex = new JsonObject(Json.encode(gender));
             Response response = Response.ok(jsonArraySex).build();
             if (response.getStatus() == 200) {
                 if (jsonArraySex.isEmpty()) {
-                    jsonResponseFail.put("message", "SEX  BY NAME: " + description.toUpperCase() + " NOT EXISTS");
-                    return Response.ok(jsonResponseFail).build();
+                    jsonResponse.put("message", "Género: " + description + " no se encuentra registrado");
+                    return Response.ok(jsonResponse).build();
                 }
                 return Response.ok(response.getEntity()).build();
             }
@@ -90,7 +89,7 @@ public class SexImpl {
     public Response citySave(JsonObject jsonDataSex) {
         try {
             Gender gender = new Gender();
-            gender.description = jsonDataSex.getString("description").toUpperCase();
+            gender.description = jsonDataSex.getString("description");
             gender.dateCreate = new Date();
             sexRepository.sexSave(gender);
             JsonObject jsonResponseCreateSex = new JsonObject();
@@ -108,8 +107,8 @@ public class SexImpl {
             long responseDelete = sexRepository.sexDelete(id);
 
             if (responseDelete <= 0) {
-                jsonResponseFail.put("message", "Género " + jsonDataCity.getString("description") + " no se encuentra registrado");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Género " + jsonDataCity.getString("description") + " no se encuentra registrado");
+                return Response.ok(jsonResponse).build();
             }
             jsonResponseDeleteSex.put("message", "Género " + jsonDataCity.getString("description") + " ha sido eliminada correctamente");
             return Response.ok(jsonResponseDeleteSex).build();
@@ -124,8 +123,8 @@ public class SexImpl {
             long id = Long.parseLong(jsonDataSex.getString("id"));
             String description = jsonDataSex.getString("description");
             if (id <= 0 || description == null) {
-                jsonResponseFail.put("message", "Género " + jsonDataSex.getString("description") + " no se encuentra registrado");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message", "Género " + jsonDataSex.getString("description") + " no se encuentra registrado");
+                return Response.ok(jsonResponse).build();
             }
             Gender gender = sexRepository.sexFindById(id);
             gender.description = description.toUpperCase();

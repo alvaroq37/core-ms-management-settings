@@ -18,30 +18,27 @@ public class MaterialImpl {
     @Inject
     MaterialRepository materialRepository;
 
-    JsonObject jsonResponseFail = new JsonObject();
+    JsonObject jsonResponse = new JsonObject();
     public Response materialListAll(){
         try {
             List<Material> materialList =materialRepository.materialListAll();
             JsonArray jsonArrayMaterial = new JsonArray(materialList);
             if(jsonArrayMaterial.isEmpty()){
-                jsonResponseFail.put("message","MATERIAL LIST EMPTY");
-                return Response.ok(jsonResponseFail).build();
+                jsonResponse.put("message","No existen materiales disponibles");
+                return Response.ok(jsonResponse).build();
             }
             Response response = Response.ok(jsonArrayMaterial).build();
             if(response.getStatus() == 200){
-                return response;
+                return Response.ok(response.getEntity()).build();
             }
-            jsonResponseFail.put("message","SERVICE NOT AVAILABLE");
-            return Response.ok(jsonResponseFail).build();
+            return Response.ok(jsonResponse.put("message", "Servicio no disponible")).build();
         }catch (Exception e){
-            return Response.ok(e.getMessage()).build();
+            return Response.ok(jsonResponse.put("message", e.getMessage())).build();
         }
     }
 
     public Response materialSave(JsonObject jsonDataMaterial){
         try {
-            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
-
             Material material = new Material();
             material.description = jsonDataMaterial.getString("description");
             material.karat = Integer.parseInt(jsonDataMaterial.getString("karat"));
@@ -50,12 +47,10 @@ public class MaterialImpl {
             material.dateCreate = new Date();
             material.userCreate = jsonDataMaterial.getInteger("user_create");
             material.userUpdate = jsonDataMaterial.getInteger("user_update");
-
             materialRepository.materialSave(material);
 
-            JsonObject jsonResponseMaterialSave = new JsonObject();
-            jsonResponseMaterialSave.put("message", "MATERIAL " + jsonDataMaterial.getString("description").toUpperCase() + " CREATED");
-            return Response.ok(jsonResponseMaterialSave).build();
+            jsonResponse.put("message", "Material " + jsonDataMaterial.getString("description") + " registrado correctamente");
+            return Response.ok(jsonResponse).build();
         }catch (Exception e){
             return Response.ok(e.getMessage()).build();
         }

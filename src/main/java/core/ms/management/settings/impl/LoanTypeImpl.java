@@ -39,7 +39,7 @@ public class LoanTypeImpl {
             loanType.description = jsonDataLoanType.getString("description");
             loanType.rate = Double.parseDouble(jsonDataLoanType.getString("rate"));
             loanTypeRepository.loanTypeSave(loanType);
-            return Response.ok(jsonResponsePersist.put("message", "TIPO DE PRESTAMO REGISTRADO CORRECTAMENTE")).build();
+            return Response.ok(jsonResponsePersist.put("message", "Tipo de préstamo registrado correctamente")).build();
         }catch (Exception e){
             return Response.accepted(jsonResponsePersist.put("message", e.getMessage())).build();
         }
@@ -51,7 +51,7 @@ public class LoanTypeImpl {
             Long id = jsonDataLoanType.getLong("id");
             LoanType loanType = loanTypeRepository.loanTypeFindById(id);
             if(loanType == null){
-                return Response.ok(jsonFind.put("message", "TIPO DE PRESTAMO NO ENCONTRADO")).build();
+                return Response.ok(jsonFind.put("message", "Tipo de préstamo no encontrado")).build();
             }
             Response response = Response.ok(new JsonObject(Json.encode(loanType))).build();
             if(response.getStatus() == 200){
