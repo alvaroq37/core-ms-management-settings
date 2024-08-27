@@ -16,6 +16,8 @@ public class Agency {
     public String name;
     @Column(name = "address")
     public String address;
+    @Column(name = "phone")
+    public Integer phone;
     @Column(name = "date_create")
     public Date dateCreate;
     @Column(name = "date_update")
@@ -27,4 +29,7 @@ public class Agency {
     @ManyToOne(targetEntity = City.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "city_id")
     public City city;
+    @ManyToOne(targetEntity = Enterprise.class, fetch =FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "enterprise_id")
+    public Enterprise enterprise;
 }

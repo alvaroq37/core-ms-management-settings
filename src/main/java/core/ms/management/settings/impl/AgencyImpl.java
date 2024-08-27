@@ -2,9 +2,11 @@ package core.ms.management.settings.impl;
 
 import core.ms.management.settings.dao.entity.Agency;
 import core.ms.management.settings.dao.entity.City;
+import core.ms.management.settings.dao.entity.Enterprise;
 import core.ms.management.settings.dao.entity.User;
 import core.ms.management.settings.dao.repository.AgencyRepository;
 import core.ms.management.settings.dao.repository.CityRepository;
+import core.ms.management.settings.dao.repository.EnterpriseRepository;
 import core.ms.management.settings.dao.repository.UserRepository;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
@@ -24,6 +26,9 @@ public class AgencyImpl {
 
     @Inject
     CityRepository cityRepository;
+
+    @Inject
+    EnterpriseRepository enterpriseRepository;
 
     JsonObject jsonResponse = new JsonObject();
 
@@ -90,16 +95,21 @@ public class AgencyImpl {
         try {
             if(jsonDataAgency.getJsonObject("city")!=null && !jsonDataAgency.getString("name").isEmpty()){
                 JsonObject jsonCity = jsonDataAgency.getJsonObject("city");
-                long idCity = jsonCity.getLong("id");
-                if(idCity > 0){
+                JsonObject jsonEnterprise = jsonDataAgency.getJsonObject("enterprise");
+                Long idCity = jsonCity.getLong("id");
+                Long idEnterprise = jsonEnterprise.getLong("id");
+                if(idCity > 0 && idEnterprise > 0){
                     City city = cityRepository.cityFindById(idCity);
+                    Enterprise enterprise = enterpriseRepository.enterpriseFindById(idEnterprise);
 
                     Agency agency = new Agency();
                     agency.name = jsonDataAgency.getString("name");
                     agency.address = jsonDataAgency.getString("address");
+                    agency.phone = Integer.parseInt(jsonDataAgency.getString("phone"));
                     agency.userCreate = jsonDataAgency.getInteger("user_create");
                     agency.dateCreate = new Date();
                     agency.city = city;
+                    agency.enterprise = enterprise;
                     agencyRepository.agencySave(agency);
 
                     jsonResponse.put("message", "Agencia " + jsonDataAgency.getString("name") + " registrada correctamente");
@@ -147,6 +157,7 @@ public class AgencyImpl {
             agency.id = jsonDataAgency.getLong("id");
             agency.name = jsonDataAgency.getString("name");
             agency.address = jsonDataAgency.getString("address");
+            agency.phone = jsonDataAgency.getInteger("phone");
             agencyRepository.agencyUpdate(agency);
             jsonResponse.put("message", "Agencia " + jsonResponse.getString("name") + " actualizada correctamente");
             Response response = Response.ok(jsonResponse).build();
