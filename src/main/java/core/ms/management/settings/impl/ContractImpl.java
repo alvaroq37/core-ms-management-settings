@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class ContractImpl {
 
     public Response contractSave(JsonObject jsonDataContract) {
         try {
-            SimpleDateFormat formatDate = new SimpleDateFormat("dd-MM-yyyy");
+
             JsonObject jsonClient = jsonDataContract.getJsonObject("client");
             JsonObject jsonAgency = jsonDataContract.getJsonObject("agency");
             JsonObject jsonDiscount = jsonDataContract.getJsonObject("business_discount");
@@ -100,8 +101,12 @@ public class ContractImpl {
             Long idBusinessDiscount = jsonDiscount.getLong("id");
             Long idCurrency = jsonCurrency.getLong("id");
             Long idLoanType= jsonLoanType.getLong("id");
-            String dExpiration = jsonDataContract.getString("date_expiration");
-            Date date_expiration = formatDate.parse(dExpiration);
+
+            Date date_expiration = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date_expiration);
+            calendar.add(Calendar.DAY_OF_YEAR, 30);
+            date_expiration = calendar.getTime();
 
             Agency agency = agencyRepository.agencyFindById(idAgency);
             Client client = clientRepository.clientFindById(idClient);

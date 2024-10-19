@@ -8,6 +8,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
+
 @ApplicationScoped
 public class BusinessDiscountImpl {
 
@@ -41,6 +43,7 @@ public class BusinessDiscountImpl {
                 businessDiscount.description = jsonBusinessDiscount.getString("description");
                 businessDiscount.value = Float.parseFloat(jsonBusinessDiscount.getString("value"));
                 businessDiscount.status = jsonBusinessDiscount.getBoolean("status");
+                businessDiscount.dateCreate = new Date();
                 businessDiscountRepository.saveBusinessDiscount(businessDiscount);
                 jsonResponse.put("message", "Descuento " + jsonBusinessDiscount.getString("description") + " registrado correctamente");
                 return Response.ok(jsonResponse).build();

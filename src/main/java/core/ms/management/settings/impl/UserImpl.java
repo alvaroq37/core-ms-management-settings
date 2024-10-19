@@ -140,6 +140,7 @@ public class UserImpl {
             user.email = jsonDataUser.getString("email");
             user.dateBirth = formatDate.parse(jsonDataUser.getString("dateBirth"));
             user.password = jsonDataUser.getString("password");
+            user.dateCreate = new Date();
             user.city = city;
             user.occupation = occupation;
             user.gender = gender;

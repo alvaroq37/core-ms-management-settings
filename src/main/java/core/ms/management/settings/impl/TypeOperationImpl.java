@@ -10,6 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -41,7 +42,7 @@ public class TypeOperationImpl {
         try {
             TypeOperation typeOperation = new TypeOperation();
             typeOperation.description=jsonData.getString("description");
-
+            typeOperation.dateCreate = new Date();
             typeOperationRepository.typeOperationSave(typeOperation);
             JsonObject jsonResponseCreateTypeOperation = new JsonObject();
             jsonResponseCreateTypeOperation.put("message", "Tipo de Operacion registrada correctamente");

@@ -8,6 +8,8 @@ import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -85,6 +87,7 @@ public class OccupationImpl {
         try {
             Occupation occupation = new Occupation();
             occupation.description = jsonDataCountry.getString("description");
+            occupation.dateCreate = new Date();
             occupationRepository.occupationSave(occupation);
             JsonObject jsonResponseOccupationSave = new JsonObject();
             jsonResponseOccupationSave.put("message", "Ocupación " + jsonDataCountry.getString("description") + " registrada correctamente");

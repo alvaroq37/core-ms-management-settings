@@ -9,6 +9,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Date;
 import java.util.List;
 
 @ApplicationScoped
@@ -38,6 +39,7 @@ public class LoanTypeImpl {
             loanType.id = 0;
             loanType.description = jsonDataLoanType.getString("description");
             loanType.rate = Double.parseDouble(jsonDataLoanType.getString("rate"));
+            loanType.dateCreate = new Date();
             loanTypeRepository.loanTypeSave(loanType);
             return Response.ok(jsonResponsePersist.put("message", "Tipo de préstamo registrado correctamente")).build();
         }catch (Exception e){
