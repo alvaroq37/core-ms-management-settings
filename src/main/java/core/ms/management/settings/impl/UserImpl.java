@@ -11,7 +11,6 @@ import jakarta.ws.rs.core.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @ApplicationScoped
 public class UserImpl {
