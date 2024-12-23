@@ -34,7 +34,6 @@ public class ClientImpl {
 
     JsonObject jsonResponse = new JsonObject();
 
-    ObjectMapper mapper = new ObjectMapper();
     public Response clientListAll() {
         try {
             JsonArray jsonArrayClientAll = new JsonArray(clientRepository.clientListAll());
